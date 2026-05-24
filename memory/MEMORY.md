@@ -16,3 +16,4 @@
 - [Strategy Finalization](strategy_finalization.md) — 策略定稿
 - [User History](user_history.md) — 用户历史记录
 - [Session 2026-05-09](session_2026-05-09.md) — 2026-05-09会话记录
+- [Education Upgrade](education_upgrade.md) — 学历提升：专本套读，广西民族大学金融学020301K，9门统考43分及格

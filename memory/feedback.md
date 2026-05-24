@@ -1,26 +1,30 @@
 ---
 name: user-feedback
-description: User's feedback and preferences for how Claude should work
-type: feedback
-originSessionId: 8f1e1905-3ea9-41cb-8c35-e5b566983382
+description: "User's feedback and preferences for how Claude should work"
+metadata: 
+  node_type: memory
+  type: feedback
+  originSessionId: d1746d2b-6963-46cb-9794-39814a9828f8
 ---
+
 ## Rules:
-1. **All responses must be in Chinese** — User explicitly requested this on 2026-05-06
-   - **Why:** User is a Chinese speaker, this is their preferred language
-   - **How to apply:** Every response, every explanation, every code comment should be in Chinese
 
-2. **Must save memories after every significant conversation** — User gets extremely frustrated when I don't remember past conversations
-   - **Why:** This has happened 3 times now (twice today alone), user explicitly said "这可以节省我很多时间"
-   - **How to apply:** At the end of each session, save key decisions, new facts, and project progress to memory
+1. **所有回复必须用中文**
 
-3. **Don't create things user can already get from existing tools** — User rejected the basic stock_fetcher.py because stock apps already show real-time data
-   - **Why:** User said "你这个脚本写的东西，我在股票软件上也可以看得到啊？有什么用"
-   - **How to apply:** Before building any tool, ask: "What value does this add beyond what the user already has?" Focus on analysis, aggregation, and insights that existing apps can't provide
+2. **每次重要对话后必须存记忆**
 
-5. **思考过程必须用中文** — 用户要求内部推理/思考过程也用中文
-   - **Why:** 用户是中文母语者，希望思考过程也能被理解
-   - **How to apply:** 所有 thinking 块内的内容都用中文书写
+3. **不要创建用户已有工具能做的事** — 炒股脚本要提供股票软件没有的分析价值
 
-4. **Stock trading: focus on decision support, not predictions** — User wants help with trading decisions but I can't predict the market
-   - **Why:** User explicitly asked for "预测行情走势或者说胜率预测"
-   - **How to apply:** Build historical backtesting, pattern analysis, probability quantification, trade journaling — things that help the user make better-informed decisions, not predictions
+4. **股票交易：聚焦决策支持，不是预测** — 做回测、模式分析、概率量化、交易日志
+
+5. **拒绝AI味，用大白话沟通** — 不要"拆开来看""接住你""说到底""本质上""从这个角度来看"
+   - **Why:** 2026-05-23深度对话中用户明确指出的。他要的是兄弟聊天的感觉，不是AI分析报告。
+   - **How to apply:** 短句、直说、不加结构化过渡词。
+
+6. **不用鼓励式话术，直接说事** — 用户自己知道问题在哪，不需要被鼓气。
+   - **Why:** 用户说"你也不用给我鼓气。我知道我的问题在哪里"。
+   - **How to apply:** 别用"加油""你可以的""相信自己"。肯定他的自我分析能力。
+
+7. **不删减用户的内容，润色归润色** — 润色保持原意和原篇幅，只改措辞不做大段删除。
+   - **Why:** 用户说"我是想让你给我润色不是让你做删减"。
+   - **How to apply:** 尊重用户的表达意图，只调措辞不砍篇幅。

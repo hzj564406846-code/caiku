@@ -14,3 +14,5 @@ originSessionId: 8f1e1905-3ea9-41cb-8c35-e5b566983382
 - Python 3.12.0 available, requests/pandas/schedule/openpyxl installed
 - Desktop path: `C:\Users\Administrator\Desktop`
 - Desktop shortcut: `Claude Code.bat` and `Claude Code.lnk` already created
+- Memory sync: GitHub repo `https://github.com/hzj564406846-code/caiku.git`, auto-sync via scheduled task every 30 min, proxy `http://127.0.0.1:7892`
+- Another PC setup: clone repo → symlink memory dir → create scheduled task with sync-memory.bat

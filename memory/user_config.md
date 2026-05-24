@@ -1,0 +1,16 @@
+---
+name: user-config
+description: DeepSeek API backend, settings.json path, environment variables, claude install location
+type: user
+originSessionId: 8f1e1905-3ea9-41cb-8c35-e5b566983382
+---
+- Claude Code installed at: `C:\Users\Administrator\AppData\Roaming\QClaw\npm-global\claude` (npm global install via QClaw)
+- Settings in `.claude/settings.json` with env vars:
+  - ANTHROPIC_BASE_URL: https://api.deepseek.com/anthropic
+  - ANTHROPIC_MODEL: deepseek-v4-pro
+  - ANTHROPIC_DEFAULT_HAIKU_MODEL: deepseek-v4-flash
+  - Theme: dark
+- No `mcp.json` configured yet (checked both project and global)
+- Python 3.12.0 available, requests/pandas/schedule/openpyxl installed
+- Desktop path: `C:\Users\Administrator\Desktop`
+- Desktop shortcut: `Claude Code.bat` and `Claude Code.lnk` already created

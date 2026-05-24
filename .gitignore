@@ -1,0 +1,6 @@
+# 忽略所有
+/*
+# 保留 memory 文件夹
+!/memory/
+# 保留 .gitignore 自己
+!.gitignore

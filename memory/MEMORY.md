@@ -1,11 +1,18 @@
-- [User Config](user_config.md) — DeepSeek API backend, claude install path, Python env, desktop shortcuts
-- [User Profile](user_profile.md) — 胡志君, 风控背景, 炒股/游戏, 少数民族研究, 所有回复用中文
-- [Conversation History](conversation_history.md) — All 5+ past sessions summarized with key decisions
-- [Stock Trading](stock_trading.md) — 三花智控持仓, backtest.py/stock_fetcher.py, 交易决策支持需求
-- [User Feedback](feedback.md) — 必须用中文、每次都要存记忆、不做已有工具能做的事、炒股聚焦决策辅助
-- [Video Generation](video_generation_project.md) — AI视频生成器v1-v5开发记录，ComfyUI环境，核心阻塞：DeepSeek看不到图
-- [QClaw Integration](qclaw_integration.md) — QClaw本地多模态Agent：API地址127.0.0.1:28789，图片必须压缩到512px JPEG再发
-- [QClaw Comm Protocol](qclaw_comm_protocol.md) — 微信→QClaw→inbox→Claude→outbox→QClaw→微信，文件通讯协议
-- [Robot Vacuum](robot_vacuum.md) — 小米扫地机器人控制项目，IP 192.168.110.197，阻塞：Token获取
+- [User Config](user_config.md) — DeepSeek API后端, claude路径, Python环境
+- [User Profile](user_profile.md) — 胡志君, 风控背景, 炒股, 所有回复用中文
+- [Stock Trading](stock_trading.md) — 四大核心需求, V9进展, 实盘模拟, D1数据源修复, 关键文件
+- [User Feedback](feedback.md) — 必须用中文, 存记忆, 用大白话, 策略方向:入场时机>打分排名
+- [V9 Strategy](v9_strategy.md) — 7维评分框架, 权重表, 回测摘要, D1数据源
+- [Installed Skills](installed_skills.md) — UZI-Skill已加载可用, Alpha-Skills/财报排雷未注册
+- [Social Media Ops](social_media_ops.md) — 社媒运营+跨境电商, TikTok养号, AdsPower, 布偶挂件赛道
+- [Current Positions](current_positions.md) — 实盘持仓(603501豪威300股@102.75, 600183生益100股@104.77)
+- [Conversation History](conversation_history.md) — 历史会话摘要与关键决策
+- [Video Generation](video_generation_project.md) — AI视频生成器v1-v5开发记录，ComfyUI环境
+- [QClaw Integration](qclaw_integration.md) — QClaw本地多模态Agent：API地址127.0.0.1:28789
+- [QClaw Comm Protocol](qclaw_comm_protocol.md) — 微信→QClaw→inbox→Claude→outbox→QClaw→微信
+- [Robot Vacuum](robot_vacuum.md) — 小米扫地机器人控制项目，IP 192.168.110.197
 - [Aggressive Strategy](aggressive_short_term_strategy.md) — 激进短线策略（约一周持仓）新会话启动包
-- [详细分析报告](detailed_analysis_spec.md) — 个股深度分析功能技术规格书（供笔记本Claude参考）
+- [详细分析报告](detailed_analysis_spec.md) — 个股深度分析功能技术规格书
+- [Strategy Finalization](strategy_finalization.md) — 策略定稿
+- [User History](user_history.md) — 用户历史记录
+- [Session 2026-05-09](session_2026-05-09.md) — 2026-05-09会话记录

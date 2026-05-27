@@ -1,39 +1,44 @@
 ---
 name: qclaw-integration
-description: QClaw本地多模态Agent的API调用方式、图片压缩参数、评分流程
-type: reference
-originSessionId: 656cad54-9f29-4e3f-ab96-60f534650d89
+description: QClaw本地多模态Agent——看图流程、API、启动方式
+metadata: 
+  node_type: memory
+  type: reference
+  originSessionId: 80c9e7f4-e1c7-487d-8166-6ed089a144de
 ---
+
 ## QClaw 是什么
-本地运行的 AI agent，有多模态/视觉能力，充当 DeepSeek（纯文本）的"眼睛"。用来审查 ComfyUI 生成的图片质量。
+本地 Electron 桌面应用，提供多模态/视觉能力。充当 DeepSeek（纯文本模型）的"眼睛"。
 
-## API 连接
-- **地址**: `http://127.0.0.1:28789/v1/chat/completions`
-- **认证**: Bearer token（具体 token 在 `test_qclaw_vision.py` 中）
-- **格式**: OpenAI 兼容 API
-- **多模态**: 支持 `image_url` 在 content 中（base64 或 URL）
+## 安装位置
+- 快捷方式: `C:\Users\Public\Desktop\QClaw.lnk`（公共桌面，所有人可见）
+- 安装目录: `D:\AI\QClaw\QClaw.exe`
 
-## 图片压缩（必须！）
-原始 ComfyUI 输出是 PNG（~2.9MB base64），直接发给 QClaw 会超长。必须在发送前压缩：
-```python
-from PIL import Image
-img = Image.open(path).convert("RGB")
-img.thumbnail((512, 512), Image.LANCZOS)  # 缩到 512px
-img.save(temp_path, "JPEG", quality=65)    # JPEG 65% → ~15-27KB
-```
-压缩后 base64 约 15-27KB，可以正常发送。
+## API
+- 地址: `http://127.0.0.1:28789/v1/chat/completions`
+- 认证: Bearer `5b50f5ea834b5d056c47b5ebe619b7557e145eae64fa73a3`
+- 格式: OpenAI 兼容
+- 模型: `openclaw/main`
+- 多模态: 支持 image_url（base64）
 
-## 评分流程
-1. 压缩图片到 512px JPEG
-2. base64 编码
-3. 发送给 QClaw，prompt 中包含评分维度（民族元素辨识度、构图、色彩、光影、整体质感）
-4. QClaw 返回中文评价 + 分数（/50）
-5. 根据低分项调整 ComfyUI prompt 重新生成
+## 看图流程（每次需要看图时执行）
+1. 检查 QClaw 是否在运行：`curl -s http://127.0.0.1:28789/v1/models`
+2. 如果没反应 → 启动：`start "" "D:\AI\QClaw\QClaw.exe"` ，等 10 秒让它起来
+3. 找到截图文件：`ls -lt /c/Users/Administrator/AppData/Local/Temp/ScreenShot_*`
+4. 压缩图片（PIL thumbnail 1024px, JPEG quality 70）
+5. **加载会话文件**：读 `C:\Users\Administrator\.claude\qclaw_session.json`
+6. 把新图+问题追加到 messages，整包发给 QClaw
+7. QClaw 回复追加回 messages，保存 session
+8. 返回结果给用户
 
-## 关键文件
-- `C:/Users/Administrator/temp_v5/test_qclaw_vision.py` — 首次测试 QClaw 多模态
-- `C:/Users/Administrator/temp_v5/qclaw_review.py` — 批量审查 6 张图片
-- QClaw 对油画风格的评分比写实风格更宽容
+## 持久会话机制
+- 会话文件: `C:\Users\Administrator\.claude\qclaw_session.json`
+- System prompt 已写好：QClaw 知道自己是 QClaw、我是 Claude Code、主人是胡志君
+- 每次请求带上完整 messages 历史，QClaw 就有持续上下文
+- 不是每次开新窗口，是同一个对话不断追加
 
-## Why
-DeepSeek V4 Pro 是纯文本模型看不到图，QClaw 是本地的"眼睛"，用来替代用户手动看图判断。
+## 注意事项
+- QClaw 用的是自己的线上模型，不是本地 Ollama
+- QClaw 跟 OpenClaw 是两个不同的东西，不要搞混
+- QClaw 模型也会幻觉，分析结果不能全信，错了让用户纠正
+- QClaw API 免费，但上下文靠我维护的 session 文件来模拟

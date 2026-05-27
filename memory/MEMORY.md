@@ -1,19 +1,26 @@
+## 共享记忆 (两台电脑通用)
 - [User Config](user_config.md) — DeepSeek API后端, claude路径, Python环境
 - [User Profile](user_profile.md) — 胡志君, 风控背景, 炒股, 所有回复用中文
-- [Stock Trading](stock_trading.md) — 四大核心需求, V9进展, 实盘模拟, D1数据源修复, 关键文件
-- [User Feedback](feedback.md) — 必须用中文, 存记忆, 用大白话, 策略方向:入场时机>打分排名
+- [User Feedback](feedback.md) — 沟通规则+前置条件要求
 - [V9 Strategy](v9_strategy.md) — 7维评分框架, 权重表, 回测摘要, D1数据源
-- [Installed Skills](installed_skills.md) — UZI-Skill已加载可用, Alpha-Skills/财报排雷未注册
-- [Social Media Ops](social_media_ops.md) — 社媒运营+跨境电商, TikTok养号, AdsPower, 布偶挂件赛道
-- [Current Positions](current_positions.md) — 实盘持仓(603501豪威300股@102.75, 600183生益100股@104.77)
-- [Conversation History](conversation_history.md) — 历史会话摘要与关键决策
-- [Video Generation](video_generation_project.md) — AI视频生成器v1-v5开发记录，ComfyUI环境
-- [QClaw Integration](qclaw_integration.md) — QClaw本地多模态Agent：API地址127.0.0.1:28789
-- [QClaw Comm Protocol](qclaw_comm_protocol.md) — 微信→QClaw→inbox→Claude→outbox→QClaw→微信
-- [Robot Vacuum](robot_vacuum.md) — 小米扫地机器人控制项目，IP 192.168.110.197
-- [Aggressive Strategy](aggressive_short_term_strategy.md) — 激进短线策略（约一周持仓）新会话启动包
-- [详细分析报告](detailed_analysis_spec.md) — 个股深度分析功能技术规格书
+- [Installed Skills](installed_skills.md) — UZI-Skill已加载可用
+- [Aggressive Strategy](aggressive_short_term_strategy.md) — 激进短线策略启动包
+- [详细分析报告](detailed_analysis_spec.md) — 个股深度分析技术规格书
 - [Strategy Finalization](strategy_finalization.md) — 策略定稿
 - [User History](user_history.md) — 用户历史记录
-- [Session 2026-05-09](session_2026-05-09.md) — 2026-05-09会话记录
-- [Education Upgrade](education_upgrade.md) — 学历提升：专本套读，广西民族大学金融学020301K，9门统考43分及格
+- [Conversation History](conversation_history.md) — 历史会话摘要
+- [Session 2026-05-09](session_2026-05-09.md)
+- [Education Upgrade](education_upgrade.md) — 学历提升
+- [Social Media Ops](social_media_ops.md) — 社媒运营+跨境电商
+- [Video Generation](video_generation_project.md) — AI视频生成器
+- [QClaw Integration](qclaw_integration.md) — QClaw本地多模态Agent
+- [QClaw Comm Protocol](qclaw_comm_protocol.md) — 微信↔QClaw↔Claude通信
+- [Robot Vacuum](robot_vacuum.md) — 小米扫地机器人
+
+## 交易记忆 — Desktop (这台电脑)
+- [Stock Trading](desktop/stock_trading.md) — v2.3策略+D4改造+top_n移除
+- [Current Positions](desktop/current_positions.md) — 实盘+模拟盘v2.3
+
+## 交易记忆 — Laptop (另一台电脑)
+- [Stock Trading](laptop/stock_trading.md) — 另一台的策略状态
+- [Current Positions](laptop/current_positions.md) — 另一台的持仓

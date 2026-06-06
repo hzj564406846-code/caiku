@@ -2,6 +2,7 @@
 - [User Config](user_config.md) — DeepSeek API后端, claude路径, Python环境
 - [User Profile](user_profile.md) — 胡志君, 风控背景, 炒股, 所有回复用中文
 - [User Feedback](feedback.md) — 沟通规则+前置条件要求
+- [Chat Interaction Rules](chat_interaction_rules.md) — 聊天交互规则：递球接球、回复长度、深夜规则、幽默风格
 - [V9 Strategy](v9_strategy.md) — 7维评分框架, 权重表, 回测摘要, D1数据源
 - [Installed Skills](installed_skills.md) — UZI-Skill已加载可用
 - [Aggressive Strategy](aggressive_short_term_strategy.md) — 激进短线策略启动包
@@ -10,6 +11,8 @@
 - [User History](user_history.md) — 用户历史记录
 - [Conversation History](conversation_history.md) — 历史会话摘要
 - [Session 2026-05-09](session_2026-05-09.md)
+- [Session 2026-05-30](session_2026-05-30.md)
+- [Session 2026-06-01~06-05](session_2026-06-01-to-06-05.md) — 聊天规则升级、防城港看海、欲望讨论、Claude App
 - [Education Upgrade](education_upgrade.md) — 学历提升
 - [Social Media Ops](social_media_ops.md) — 社媒运营+跨境电商
 - [Video Generation](video_generation_project.md) — AI视频生成器

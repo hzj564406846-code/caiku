@@ -86,3 +86,15 @@ metadata:
 5. 用户用DeepSeek API后端
 6. 东方财富push2全系列封锁，H5 API是突破口
 7. GUI批量筛选必须用本地缓存
+
+---
+
+## 2026-05-30 (会话 test-123)
+
+### 主题
+安装 Codex 桌面端（非 CLI），排查并修复 Claude Code 记忆系统不自动归档的问题。
+
+### 完成事项
+- 用 npm 全局安装 `@openai/codex`，通过 `codex app` 拉起桌面体验
+- 确认用户 5 月 9 日后一直在用 Claude Code，但 MEMORY.md 只停留在 5 月 9 日
+- 查出根因：记忆系统需要手动写总结，之前多次会话从未触发归档，导致断层

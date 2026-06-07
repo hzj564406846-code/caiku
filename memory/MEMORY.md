@@ -13,6 +13,7 @@
 - [Session 2026-05-09](session_2026-05-09.md)
 - [Session 2026-05-30](session_2026-05-30.md)
 - [Session 2026-06-01~06-05](session_2026-06-01-to-06-05.md) — 聊天规则升级、防城港看海、欲望讨论、Claude App
+- [Session 2026-06-08](session_2026-06-08.md) — 回测猫腻审查、聚宽验证、交易明细诊断、弹性趋势=波动排名机、Codex协作回顾
 - [Education Upgrade](education_upgrade.md) — 学历提升
 - [Social Media Ops](social_media_ops.md) — 社媒运营+跨境电商
 - [Video Generation](video_generation_project.md) — AI视频生成器

@@ -39,10 +39,32 @@ metadata:
 - v2.3各维度单独IC不强但组合有效。IC调整版跑输原版-10.5%
 - 结论: 不改因子权重
 
+## V9 因子研究 (Codex 新窗口, 2026-06-07)
+- 旧窗口(019e753a-87a9)定调: V9是动量排名机非选股机，D6基本面5分太弱，缺乏热钱追踪
+- 新窗口(019e753a-8ca0)进度: 拆48个原始因子，680+组合回测
+- 最强组合: D3+ATR (10日+6.81%/64.9%), ATR+MA20乖离 (+6.96%/65.5%)
+- 新增"高弹性趋势池"接入stock_advisor.py
+- 数据源: Tushare/BaoStock/AKShare分层
+
+### 待补方向 (旧窗口提了但新窗口还没做)
+1. **基本面硬闸门**: 营收/利润增速不达标的技术面再高也不进候选
+2. **热钱前置信号**: 板块成交额异常放大+连板集中+研报密度
+
 ## Key Files
 - C:\Users\Administrator\aggressive_strategy.py — v2.3评分引擎(含build_sector_heat)
 - C:\Users\Administrator\aggressive_backtest.py — v2.3回测引擎
 - C:\Users\Administrator\aggressive_paper_trading.py — v2.3实盘模拟
-- C:\Users\Administrator\stock_data\paper_trading_aggressive/ — 模拟盘账户
-- C:\Users\Administrator\stock_data\float_mv_cache.json — 流通市值缓存
-- C:\Users\Administrator\.claude\projects\C--Users-Administrator — 记忆git仓库(github sync)
+- C:\Users\56440\v8_desktop\stock_advisor.py — V9顾问(本机)
+- C:\Users\56440\v8_desktop\run_factor_research.py — 多因子回测
+- C:\Users\56440\v8_desktop\run_factor_robustness.py — 稳健性验证
+- C:\Users\56440\v8_desktop\reports\ — 回测报告
+- C:\Users\56440\.qclaw\workspace\memory\2026-06-07.md — Codex每日memory
+- C:\Users\56440\.claude\caiku-sync\memory\ — 共享记忆(github sync)
+
+## 回测审查 (2026-06-08 Claude)
+- 本地`backtest_engine.py`存在多个问题：当天收盘打分当天买(无延迟)、幸存者偏差(当前CSI300成分股)、D6基本面全中性、无交易成本
+- 聚宽交易回测实测同一策略线：总收益6.47%、夏普0.435、胜率36.8%、最大回撤11.28%
+- 本地因子研究10日+6.96%被夸大；真实交易环境只剩微弱正信号
+- 亏损集中在黄金+有色+航运（山东黄金、中金黄金、南山铝业、招商轮船）
+- 根因：弹性趋势三因子=波动排名机≠交易系统（跟V9一个病）
+- 诊断笔记：`C:\Users\56440\.qclaw\workspace\memory\2026-06-08-claude-review.md`

@@ -1,0 +1,73 @@
+# 股票顾问系统记忆
+
+## 2026-06-08 隔夜美股科技风险因子
+- 项目目录：`C:\Users\56440\v8_desktop`
+- 当前目标：股票顾问系统最终要服务可执行交易建议，包括每日主动扫描、单股买前审查、板块热度/今日操作建议。
+- 旧窗口遗留：基本面硬闸门、热钱/题材前置信号、自动发现最强因子组合、持续留痕。
+- 今日新增：`stock_advisor.py` 接入 `fetch_overnight_us_tech_risk()`。
+- 数据源：AkShare `stock_us_daily`，标的包括 QQQ、NVDA、AMD、TSM、TSLA、KWEB、AAPL、MSFT。
+- 规则定位：当前只作为 daily 环境风险/追高闸门，不直接改变个股买卖标签；后续要回测隔夜美股科技对 A股科技/高弹性趋势池次日表现的影响。
+- 今日风险结果：QQQ -4.80%，半导体映射均值 -7.92%，美股大科技均值 -3.49%，KWEB -2.76%，风险等级 `high`。
+- 今日操作建议：科技高弹性方向先防守，不追高；只看低开后承接强的回踩机会，候选股评级降一级。
+- 验证通过：`python -m py_compile stock_advisor.py run_factor_research.py run_factor_robustness.py`。
+- 验证通过：`python stock_advisor.py --daily --limit 10 --top 5 --json --no-tushare`。
+- 报告路径：`C:\Users\56440\v8_desktop\reports\daily_report_20260608_004648.json`。
+- 2026-06-08 因子分类与基本面硬闸门：
+  - 项目目录：`C:\Users\56440\v8_desktop`。
+  - 当前方向：不是固定 A/B/C 因子，而是持续发掘因子，做单因子验证、组合验证、稳健性验证，找出最强且可解释的组合，最终输出每日扫描、单股买前建议、板块热度和今日操作建议。
+  - 新增/确认 `factor_registry.py`，集中登记因子分类、来源、方向和用途。V9 总分保留为 benchmark/解释，不作为核心买入触发。
+  - `run_factor_research.py` 现在引用统一因子注册表，避免因子清单在多个脚本漂移。
+  - `data_providers\tushare_provider.py` 增加 `revenue_yoy`、`profit_yoy` 财务字段。
+  - `stock_advisor.py` 接入 `evaluate_fundamental_gate()`：ROE、净利率、毛利率、资产负债率、营收增速、净利润增速构成基本面资格闸门。触发 block 时直接 `禁止买`，warn 写风险，unknown 不假装通过。
+  - 每个个股 report/每日 JSON 包含 `fundamental_gate`，屏幕报告打印硬闸门状态。
+  - 验证：`python -m py_compile stock_advisor.py run_factor_research.py run_factor_robustness.py data_providers\tushare_provider.py factor_registry.py` 通过。
+  - 验证：`python stock_advisor.py --daily --limit 10 --top 5 --json --no-tushare` 通过，报告：`C:\Users\56440\v8_desktop\reports\daily_report_20260608_011507.json`。无 Tushare 时财务闸门为 unknown，属于数据源状态，不是策略失败。
+  - 函数级验证：模拟净利润增速 -42% 会返回 `status=block`、`block=True`，用于拦截旧窗口提到的“利润暴雷但技术/V9 高分”问题。
+- 2026-06-08 逻辑复查补丁：
+  - 发现解释层一致性问题：硬闸门已能禁止买，但旧 `enrichment_reasons()` 仍可能在利润增速暴雷时按 ROE/毛利率/净利率输出“Tushare财务指标支持”，造成报告语义冲突。
+  - 已修改 `stock_advisor.py`：`enrichment_reasons(enrichment, fundamental_gate=None)` 在 gate 为 block/warn/unknown 时不再输出独立财务正向话术，资金流理由保留。
+  - 已修改 `data_providers\tushare_provider.py`：增加 `_first_non_null()`，营收/利润增速字段取第一个非空字段，避免列存在但值为空时不回退。
+  - 验证通过：`python -m py_compile stock_advisor.py run_factor_research.py run_factor_robustness.py data_providers\tushare_provider.py factor_registry.py`。
+  - 函数级验证：模拟 `profit_yoy=-42%` 时 gate 为 block，解释层不再输出“财务支持”。
+- 2026-06-08 券商终端回测调研：
+  - 用户当前使用华泰证券账户，希望借用券商终端成熟回测工具，节省 API/数据额度。
+  - 华泰官方 MATIC/MQuant 面向专业用户，提供策略编写、仿真交易、实盘交易、历史数据回测；MQuant 支持脚本/Python、Level2/历史数据回测。
+  - 华泰 MATIC 手册显示：MQuant 回测支持 A 股/场内基金，不支持两融/期权/期货；日 K 可到 20140101，分钟 K 可到 20180901，tick 约半年；行情数据不支持下载到本地或导入外部数据源；内置 Python 3.6.2，带 pandas/numpy/talib。
+  - 判断：华泰 MATIC/MQuant 可作为“低成本交叉验证/撮合验证器”，但不替代当前 Python 多因子研究主线。当前主线仍负责因子发现、组合搜索、稳健性、解释和每日建议。
+  - 普通华泰 PC 通达信/全赢版偏行情、交易、选股、VIP 批量下单，不等同于完整多因子研究平台。
+  - 用户提醒当前是下班时间，华泰客服/客户经理权限确认应顺延到工作时间；今晚不把权限未确认当成方案失败。
+- 2026-06-08 热钱/题材前置信号接入：
+  - 目标：让每日扫描回答“当前最热方向是什么、强度来自哪里、有没有扩散、今天该进攻还是防守”，暂不把它直接塞进 V9 分数。
+  - `stock_advisor.py` 新增 `fetch_external_theme_fund_flow()`：优先使用 AkShare `stock_sector_fund_flow_rank` 拉行业/概念资金流；接口失败时记录 `external_errors`，不让 daily 崩溃。
+  - `stock_advisor.py` 新增 `build_scan_theme_radar()`：外部资金流可用时展示行业/概念资金排行；不可用时回退到本次扫描池行业热度、强候选数量、扩散率。
+  - `print_daily_report()` 新增“题材/热钱雷达”区块，输出当前主线、状态、数据源、操作建议、行业/概念资金流或扫描池回退明细。
+  - daily JSON 新增 `theme_radar` 字段。
+  - `factor_registry.py` 新增 `theme_hot_money_radar`，状态为 `front_signal`，明确它是前置信号，不是已回测 alpha。
+  - 实测 AkShare 东方财富板块资金流接口在本机仍失败（JSONDecode/SSL），系统回退到 `scan_pool_fallback`，没有把数据源失败误判为策略失败。
+  - 验证通过：`python -m py_compile stock_advisor.py run_factor_research.py run_factor_robustness.py data_providers\tushare_provider.py factor_registry.py`。
+  - 验证通过：`python stock_advisor.py --daily --limit 10 --top 5 --json --no-tushare`，报告 `C:\Users\56440\v8_desktop\reports\daily_report_20260608_014413.json`。
+  - 本次小样本输出：外部板块资金流不可用，当前主线回退为 `C39计算机、通信和其他电子设备制造业`，状态 `防守观察`，建议“不主动扩大仓位”。
+- 2026-06-08 东方财富板块资金流代理/兜底修复：
+  - 用户关闭系统代理后复测：Python `urllib.getproxies()` 已为空，Windows `ProxyEnable=0`。
+  - 直连诊断：`push2.eastmoney.com/api/qt/clist/get` 仍返回 502；`push2delay.eastmoney.com/api/qt/clist/get` 同参数返回正常 JSON。
+  - AkShare `stock_sector_fund_flow_rank()` 固定使用 `push2.eastmoney.com`，因此即使关代理也会 JSONDecodeError。
+  - 已在 `stock_advisor.py` 增加 `_fetch_eastmoney_sector_fund_flow_delay()`：AkShare 主域失败时直接请求 `push2delay`，解析 `f14` 名称、`f3` 涨跌幅、`f62` 主力净流入、`f184` 净占比、`f204` 代表股。
+  - 验证通过：`fetch_external_theme_fund_flow()` 返回 `external_ok=True`，行业/概念资金流各 12 条。
+  - 验证通过：`python stock_advisor.py --daily --limit 10 --top 5 --json --no-tushare`，报告 `C:\Users\56440\v8_desktop\reports\daily_report_20260608_020321.json`。
+  - 本次输出：题材/热钱雷达已从 `scan_pool_fallback` 切换为 `akshare+scan_pool`；行业资金流前列包括一般零售、化学纤维、数字媒体；概念资金流前列包括北斗导航、航天航空、在线教育。
+- 2026-06-08 聚宽 JQData 权限测试：
+  - 用户授权测试聚宽 `jqdatasdk` 登录；本机已安装 `jqdatasdk 1.9.8`。
+  - 认证请求返回：`未开通权限`，并提示到 `https://www.joinquant.com/default/index/sdk` 提交 SDK 调用权限申请。
+  - 结论：当前账号暂不能作为本地 Python 的 JQData 数据源；仍可考虑使用聚宽网页研究/回测环境，或申请 SDK 权限后再接入本地。
+  - 留痕不记录用户账号密码。
+- 2026-06-08 聚宽网页回测最小验证模板：
+  - 用户确认可以先用聚宽网页版做外部验证。
+  - 已新增 `C:\Users\56440\v8_desktop\joinquant_elastic_trend_verify.py`，用于粘贴到聚宽网页策略编辑器。
+  - 模板验证对象：高弹性趋势线 `ATR% + 20日动量 + MA20乖离`，CSI300 股票池，每 5 日调仓，最多持有 10 只，含手续费和固定滑点。
+  - 首版故意不接 V9 D3、基本面硬闸门、题材雷达，避免一次验证混太多变量。
+  - 已新增计划文档 `C:\Users\56440\v8_desktop\reports\joinquant_web_verify_plan_20260608.md`，写明建议区间 `2025-11-20` 到 `2026-05-22`、本金、频率、对比指标和决策规则。
+  - 本地语法验证通过：`python -m py_compile joinquant_elastic_trend_verify.py`。
+- 2026-06-08 聚宽网页回测首轮结果：
+  - 用户在聚宽网页版运行策略 `高弹性趋势验证_ATR_RET20_MA20`，区间 `2025-11-20` 到 `2026-05-22`，本金 100000，频率每天，Python3。
+  - 截图指标：策略收益 6.47%，策略年化收益 13.96%，超额收益 0.83%，基准收益 5.60%，Alpha 0.036，Beta 0.797，Sharpe 0.435，最大回撤 11.28%，索提诺比率 0.591，日均超额 0.01%，日胜率 0.550，盈利次数 35，亏损次数 60，盈亏比 1.008。
+  - 判断：聚宽口径下纯 `ATR% + 20日动量 + MA20乖离` 能跑赢基准但优势不强，低胜率/低 Sharpe/最大回撤偏大，不能直接实盘化。下一步应检查交易明细和持仓，再加入 D3 趋势、基本面硬闸门、止损/回撤保护做第二轮验证。

@@ -844,6 +844,40 @@ Decision standard:
 - Do not restore V9 total score as sole buy signal.
 - ATR may be used for risk distance but not as positive alpha.
 
+## 2026-06-09: Pullback Confirmation First Result - Not Yet Valid
+
+Task/result:
+
+- `backtest_queue/pending/pullback_confirmation_001.json`
+- `backtest_queue/done/pullback_confirmation_001_result.json`
+- `reports/pullback_confirmation_20260609_173232.json`
+- `reports/pullback_confirmation_summary_20260609_173232.md`
+- New script: `run_pullback_confirmation_backtest.py`
+
+Promising clues:
+
+- Best reported realistic T+1 open config was `TP_TOP20|shallow_pullback|close_positive_after_pullback|t1_open_realistic|hold_5d_close|w90|pp10|mp2`: return `+4.61%`, DD `-4.21%`, r/dd `1.10`, PF `2.57`, win `66.7%`, trades `30`.
+- More interesting 90d configs with enough trades included:
+  - `TP_RANK|no_chase|close_positive_after_pullback|t1_open_realistic|hold_5d_close|w90|pp15|mp3`: return `+12.26%`, DD `-11.01%`, r/dd `1.11`, PF `2.09`, trades `55`.
+  - `TP_RANK|lower_shadow_reclaim|t1_open_realistic|hold_5d_close|w90|pp20|mp3`: return `+19.64%`, DD `-11.15%`, r/dd `1.76`, PF `1.99`, trades `57`.
+
+Validation defects:
+
+- Baseline summary is invalid: tail-entry baseline metrics were reported as `0.0`, so `dd_vs_baseline` cannot be trusted.
+- Window handling is suspect: `actual_date_range` is reported as `2023-11-28 ~ 2026-06-08` even for `w90`, implying the equity curve / date range is not cleanly restricted to the target window.
+- Raw report does not preserve all `5196` configurations, only Top 20 / rejected lists, so independent 120d review is impossible.
+- Top realistic results are all `90d`; no final promotion can be made without clean `120d` realistic validation.
+
+Decision:
+
+- Do not promote pullback confirmation yet.
+- Treat this result as a useful exploratory clue only.
+- A fix-and-rerun task is required before deciding whether pullback confirmation becomes the next active strategy line.
+
+Fix task issued:
+
+- `backtest_queue/pending/pullback_confirmation_fix_rerun_001.json`
+
 After every important decision, append a dated note with:
 
 - Context.

@@ -1,0 +1,154 @@
+{
+  "id": "pullback_confirmation_fix_rerun_001",
+  "created_at": "2026-06-09T17:48:00+08:00",
+  "created_by": "codex",
+  "project_root": "C:\\Users\\56440\\v8_desktop",
+  "priority": "high",
+  "purpose": "修正并重跑 pullback_confirmation_001。上一轮结果显示回踩确认线有苗头，但报告存在关键验证缺陷：baseline 被算成 0、actual_date_range 与 90/120 窗口不一致、JSON 未保留 5196 个全量配置、Top 20 几乎全是 90d，无法判断 120d 稳定性。因此不能晋级，需要先把回测框架修干净再判断。",
+  "background": {
+    "previous_task": "pullback_confirmation_001",
+    "previous_result_files": [
+      "C:\\Users\\56440\\v8_desktop\\backtest_queue\\done\\pullback_confirmation_001_result.json",
+      "C:\\Users\\56440\\v8_desktop\\reports\\pullback_confirmation_20260609_173232.json",
+      "C:\\Users\\56440\\v8_desktop\\reports\\pullback_confirmation_summary_20260609_173232.md",
+      "C:\\Users\\56440\\v8_desktop\\run_pullback_confirmation_backtest.py"
+    ],
+    "observed_promising_90d_configs": [
+      {
+        "config": "TP_RANK|no_chase|close_positive_after_pullback|t1_open_realistic|hold_5d_close|w90|pp15|mp3",
+        "return": 12.26,
+        "drawdown": -11.01,
+        "r_dd": 1.11,
+        "pf": 2.09,
+        "trades": 55
+      },
+      {
+        "config": "TP_RANK|lower_shadow_reclaim|t1_open_realistic|hold_5d_close|w90|pp20|mp3",
+        "return": 19.64,
+        "drawdown": -11.15,
+        "r_dd": 1.76,
+        "pf": 1.99,
+        "trades": 57
+      },
+      {
+        "config": "TP_TOP20|shallow_pullback|close_positive_after_pullback|t1_open_realistic|hold_5d_close|w90|pp10|mp2",
+        "return": 4.61,
+        "drawdown": -4.21,
+        "r_dd": 1.10,
+        "pf": 2.57,
+        "trades": 30,
+        "note": "Too few trades for promotion, but useful clue."
+      }
+    ],
+    "critical_defects_to_fix": [
+      "baseline_summary reports 120d pp20 return/DD/rdd/PF as 0.0, so dd_vs_baseline is invalid.",
+      "actual_date_range shown as 2023-11-28 ~ 2026-06-08 even for w90, which means metrics/equity curve are not cleanly restricted to the requested 90/120 trading-day window.",
+      "Full all_results is not written to JSON; only top_20_realistic/top_20_optimistic/rejected are saved, preventing independent review.",
+      "Target answer q1_target_met=true is misleading because top reported best has only 30 trades and primary requirement emphasized 120d stability."
+    ]
+  },
+  "requested_work": [
+    {
+      "step": 1,
+      "description": "Read STRATEGY_WORKLOG.md, pullback_confirmation_001 result files, and run_pullback_confirmation_backtest.py. First diagnose the four defects listed above. Do not just rerun the old script unchanged."
+    },
+    {
+      "step": 2,
+      "description": "Patch or create a new script, recommended name run_pullback_confirmation_fix_rerun.py. Keep it standalone. It must write full all_results to the raw JSON or a separate full-results JSON/CSV so Codex can audit every configuration."
+    },
+    {
+      "step": 3,
+      "description": "Fix windowing. For each window_days, restrict signals, entries, equity curve start, and baseline comparison to the last N eligible entry dates, plus only the necessary forward exit buffer. actual_date_range must reflect the actual tested entry-date range, not the full kline cache range."
+    },
+    {
+      "step": 4,
+      "description": "Fix baseline. Reproduce or import the known tail-entry d3+ma20_gap + dec_E baseline for the same universe, same window, same position_pct, same max_positions. Baseline metrics must be nonzero where trades exist. Cross-check 120d pp20 against the known ballpark: return about +25%, DD about -27%, r/dd about 0.93. If different, explain why."
+    },
+    {
+      "step": 5,
+      "description": "Make 120d primary. Rank and report separately: 120d realistic T+1 open configs with trades>=50; 120d realistic T+1 open configs with trades>=30 exploratory; 90d realistic configs as secondary. Do not allow a 90d config to be called final best."
+    },
+    {
+      "step": 6,
+      "description": "Focus rerun grid on the promising families from the first attempt plus controls: TP_RANK/no_chase/close_positive_after_pullback/hold5; TP_RANK/lower_shadow_reclaim/hold5; TP_TOP20/shallow_pullback/close_positive_after_pullback/hold5; TP_MA/lower_shadow_reclaim/hold5; include pp10/pp15/pp20 and mp2/mp3. Also include failed touch_reclaim_ma20 as a reject control."
+    },
+    {
+      "step": 7,
+      "description": "For every candidate, report first_half and second_half using portfolio equity/closed trades within the same 120d window, not just trade-level min return. A config that loses money in one half is not promotable unless clearly labeled exploratory."
+    },
+    {
+      "step": 8,
+      "description": "Promotion standard: realistic T+1 open, 120d, trade_count>=50, max_drawdown <= -18%, PF>1.4, positive total_return preferably >=8%, r/dd >= tail baseline, and first/second halves not contradictory. If no config meets this, do not promote; identify best exploratory candidate."
+    },
+    {
+      "step": 9,
+      "description": "Compare whether DD reduction comes from lower exposure/trade count or genuinely better trade quality: report trade_count_ratio_vs_tail_baseline, avg_cash_usage, avg_trade_return, median_trade_return, longest_loss_streak, worst 10, top 10."
+    },
+    {
+      "step": 10,
+      "description": "Final answer must say: after fixing the framework, does pullback confirmation still look promising; which rule family survives 120d; should this become the next active strategy line or remain exploratory."
+    }
+  ],
+  "must_output": {
+    "raw_report_json": "C:\\Users\\56440\\v8_desktop\\reports\\pullback_confirmation_fix_rerun_<timestamp>.json",
+    "full_results_json_or_csv": "C:\\Users\\56440\\v8_desktop\\reports\\pullback_confirmation_fix_rerun_full_<timestamp>.(json|csv)",
+    "summary_markdown": "C:\\Users\\56440\\v8_desktop\\reports\\pullback_confirmation_fix_rerun_summary_<timestamp>.md",
+    "queue_result_json": "C:\\Users\\56440\\v8_desktop\\backtest_queue\\done\\pullback_confirmation_fix_rerun_001_result.json"
+  },
+  "metrics_required": [
+    "config_name",
+    "window_days",
+    "actual_entry_date_range",
+    "actual_equity_date_range",
+    "entry_mode",
+    "trend_pool",
+    "pullback_rule",
+    "confirmation_rule",
+    "exit_rule",
+    "position_pct",
+    "max_positions",
+    "total_return",
+    "max_drawdown",
+    "return_to_drawdown",
+    "profit_factor",
+    "win_rate",
+    "trade_count",
+    "trade_count_ratio_vs_tail_baseline",
+    "avg_cash_usage",
+    "avg_trade_return",
+    "median_trade_return",
+    "avg_win",
+    "avg_loss",
+    "longest_loss_streak",
+    "worst_trade",
+    "best_trade",
+    "worst_10_trades",
+    "top_10_trades",
+    "first_half_metrics",
+    "second_half_metrics",
+    "baseline_same_config_metrics",
+    "reason_to_promote_or_reject"
+  ],
+  "questions_for_cc": [
+    "Was the previous pullback_confirmation_001 report invalid due to baseline/windowing defects?",
+    "After fixing, does any 120d realistic T+1 open pullback config meet the promotion standard?",
+    "Which rule family survives 120d: no_chase, lower_shadow_reclaim, shallow_pullback, or MA-structure pullback?",
+    "Is the improvement genuine trade quality or merely lower exposure/trade count?",
+    "Should pullback confirmation become the next active strategy line, or only an exploratory branch?"
+  ],
+  "constraints": [
+    "Do not restore V9 total score as sole buy signal.",
+    "Do not use future data for signal or confirmation.",
+    "Do not call a 90d-only result final promotion.",
+    "Do not treat baseline=0 as valid.",
+    "Do not hide full results; output all configurations.",
+    "Do not promote low trade-count configs as final even if DD is low.",
+    "Keep production advisor code unchanged in this task unless absolutely necessary."
+  ],
+  "done_when": [
+    "backtest_queue\\done\\pullback_confirmation_fix_rerun_001_result.json exists",
+    "reports contains raw summary and full-results file",
+    "baseline metrics are nonzero and cross-checked against known tail baseline",
+    "summary explicitly states whether pullback confirmation survives 120d realistic validation"
+  ]
+}

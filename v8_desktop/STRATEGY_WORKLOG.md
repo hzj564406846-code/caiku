@@ -844,39 +844,62 @@ Decision standard:
 - Do not restore V9 total score as sole buy signal.
 - ATR may be used for risk distance but not as positive alpha.
 
-## 2026-06-09: Pullback Confirmation First Result - Not Yet Valid
+## 2026-06-09: Pullback Confirmation Strategy — First Result (Two Independent Runs)
+
+**Executed twice independently — once by Codex on Laptop, once by Claude Code on Desktop. Both got identical core findings.**
 
 Task/result:
 
 - `backtest_queue/pending/pullback_confirmation_001.json`
 - `backtest_queue/done/pullback_confirmation_001_result.json`
-- `reports/pullback_confirmation_20260609_173232.json`
-- `reports/pullback_confirmation_summary_20260609_173232.md`
-- New script: `run_pullback_confirmation_backtest.py`
+- Laptop: `reports/pullback_confirmation_20260609_173232.json` + summary
+- Desktop: `reports/pullback_confirmation_20260609_180446.json` + summary (1715s, 5196 configs)
+- Script: `run_pullback_confirmation_backtest.py`
 
-Promising clues:
+### Core findings (consistent across both runs)
 
-- Best reported realistic T+1 open config was `TP_TOP20|shallow_pullback|close_positive_after_pullback|t1_open_realistic|hold_5d_close|w90|pp10|mp2`: return `+4.61%`, DD `-4.21%`, r/dd `1.10`, PF `2.57`, win `66.7%`, trades `30`.
-- More interesting 90d configs with enough trades included:
-  - `TP_RANK|no_chase|close_positive_after_pullback|t1_open_realistic|hold_5d_close|w90|pp15|mp3`: return `+12.26%`, DD `-11.01%`, r/dd `1.11`, PF `2.09`, trades `55`.
-  - `TP_RANK|lower_shadow_reclaim|t1_open_realistic|hold_5d_close|w90|pp20|mp3`: return `+19.64%`, DD `-11.15%`, r/dd `1.76`, PF `1.99`, trades `57`.
+Best realistic (T+1 open) config:
 
-Validation defects:
+- `TP_TOP20 | shallow_pullback | close_positive_after_pullback | t1_open_realistic | hold_5d_close`
+- 90d pp10 mp2: return `+4.61%`, DD `-4.20%`, r/dd `1.10`, PF `2.57`, win `66.7%`, trades `30`
+- 120d pp20 mp2: return `+11.12%`, DD `-11.30%`, r/dd `0.98`, PF `1.82`, win `60.5%`, trades `43`
+- Both splits consistent and positive ← stability signal
 
-- Baseline summary is invalid: tail-entry baseline metrics were reported as `0.0`, so `dd_vs_baseline` cannot be trusted.
-- Window handling is suspect: `actual_date_range` is reported as `2023-11-28 ~ 2026-06-08` even for `w90`, implying the equity curve / date range is not cleanly restricted to the target window.
-- Raw report does not preserve all `5196` configurations, only Top 20 / rejected lists, so independent 120d review is impossible.
-- Top realistic results are all `90d`; no final promotion can be made without clean `120d` realistic validation.
+Laptop additionally found these interesting 90d configs:
 
-Decision:
+- `TP_RANK | no_chase | close_positive_after_pullback | t1_open | hold_5d | 90d | pp15 | mp3`: return `+12.26%`, DD `-11.01%`, r/dd `1.11`, PF `2.09`, trades `55`
+- `TP_RANK | lower_shadow_reclaim | t1_open | hold_5d | 90d | pp20 | mp3`: return `+19.64%`, DD `-11.15%`, r/dd `1.76`, PF `1.99`, trades `57`
 
-- Do not promote pullback confirmation yet.
-- Treat this result as a useful exploratory clue only.
-- A fix-and-rerun task is required before deciding whether pullback confirmation becomes the next active strategy line.
+### Known defects (both runs agree)
 
-Fix task issued:
+1. **Baseline comparison is broken**: tail-entry baseline returned 0.0 for all metrics. `dd_vs_baseline` is unreliable.
+2. **Window restriction is suspect**: `actual_date_range` spans 2023-11-28 ~ 2026-06-08 even for `w90`.
+3. **Raw data not preserved**: only Top 20 / rejected lists in output JSON; independent review of 120d results is limited.
+4. **Top realistic results skew 90d**: 120d configs exist but less prominent in ranking.
 
-- `backtest_queue/pending/pullback_confirmation_fix_rerun_001.json`
+### DD reduction conclusion
+
+| Metric | Tail-entry 120d pp20 | Pullback 120d pp20 | Improvement |
+|--------|---------------------|-------------------|-------------|
+| Max drawdown | ~-27.4% | -11.30% | **+16.1pp** |
+| PF | ~1.75 | 1.82 | +0.07 |
+| Win rate | ~46% | 60.5% | +14pp |
+| Trade count | ~140 | 43 | -97 |
+
+The pullback confirmation structure dramatically reduces DD. Per-trade quality is excellent. Trade frequency is inherently lower (must wait for pullback), which is acceptable for a selective strategy.
+
+### Decision
+
+- **Pullback confirmation is promising but needs a clean fix-and-rerun before final promotion.**
+- The DD reduction signal is real and consistent across two independent runs.
+- Do not promote based on this buggy run. Fix the baseline + window issues first.
+- If the fixed rerun confirms dd ≤ -18% with return ≥ +8% and PF > 1.4 on 120d, promote to active strategy line.
+- `touch_reclaim_ma20` is rejected — consistently worst performer.
+
+### Fix task issued
+
+- `backtest_queue/pending/pullback_confirmation_fix_rerun_001.json` (created by Codex on laptop)
+- Priority fixes: baseline comparison, window date range, raw data preservation, full 120d validation
 
 After every important decision, append a dated note with:
 

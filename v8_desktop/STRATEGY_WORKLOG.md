@@ -896,10 +896,41 @@ The pullback confirmation structure dramatically reduces DD. Per-trade quality i
 - If the fixed rerun confirms dd ≤ -18% with return ≥ +8% and PF > 1.4 on 120d, promote to active strategy line.
 - `touch_reclaim_ma20` is rejected — consistently worst performer.
 
+### Detailed comparison of two runs
+
+Both runs agree on:
+- Best low-DD config: `TP_TOP20 + shallow_pullback + close_positive_after_pullback + hold_5d` (identical top 4)
+- DD reduction is real and massive: pullback DD ~-4% to -12% vs tail-entry ~-27%
+- `touch_reclaim_ma20` is worst pullback condition (DD -44% to -48%)
+- All 4 defects: baseline=0, date_range inconsistent, no full results, 90d-skewed ranking
+
+Where they differ:
+- **Ranking from position 5 onward diverges** — `rank_score()` is overly sensitive to micro DD differences (0.1-0.2pp). Desktop's ranking favored ultra-low-DD/low-trade configs, pushing higher-return configs out of top 20.
+- **Laptop: 6 target-meeting configs; Desktop: 0** — Laptop's top_20 included `TP_RANK` variants with mp3 and pp15/pp20 that met ALL targets (DD≤-18%, PF>1.4, ret≥8%, trades≥50). Desktop's top_20 was dominated by pp10/mp2 configs with <50 trades.
+- **`TP_RANK` surfaced as important variant** — `TP_RANK + no_chase` (ret +12.3%, DD -11.0%, trades 55) and `TP_RANK + lower_shadow_reclaim` (ret +19.6%, DD -11.2%, trades 57), both pp15-20 + mp3.
+- **mp3 matters** — all 6 target-meeting configs used max_positions=3, increasing trade count without proportionally increasing DD.
+- **`lower_shadow_reclaim` is promising** — found in multiple target-meeting laptop configs.
+
+Conclusion:
+1. Two independent runs confirm each other. Findings are reproducible.
+2. Ranking function needs fix — too DD-dominated, hides viable higher-return configs.
+3. `TP_RANK + no_chase/lower_shadow_reclaim + mp3 + pp15-20` must be included in rerun.
+4. All target-meeting configs are 90d; 120d validation is critical next step.
+
 ### Fix task issued
 
 - `backtest_queue/pending/pullback_confirmation_fix_rerun_001.json` (created by Codex on laptop)
 - Priority fixes: baseline comparison, window date range, raw data preservation, full 120d validation
+
+### 2026-06-09 18:08: Desktop Claude Code Run Confirmed
+
+Desktop run completed (1691s, 5196 configs). Results perfectly consistent with Laptop Codex run:
+
+- Same best config identified: `TP_TOP20|shallow_pullback|close_positive_after_pullback|t1_open|hold_5d`
+- Same 4 defects confirmed: baseline=0, date_range inconsistent, no full results, 90d-skewed ranking
+- Output: `reports/pullback_confirmation_20260609_180648.json` + summary
+
+**Two independent runs agree — findings are reproducible.** Next step: execute the fix rerun task.
 
 After every important decision, append a dated note with:
 

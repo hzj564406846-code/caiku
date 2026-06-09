@@ -1,0 +1,197 @@
+{
+  "id": "pullback_confirmation_expand_sample_001",
+  "created_at": "2026-06-09T18:35:00+08:00",
+  "created_by": "codex",
+  "project_root": "C:\\Users\\56440\\v8_desktop",
+  "priority": "high",
+  "purpose": "继续推进强趋势回踩确认线。fix_rerun 已经证明该结构能把 120d 最大回撤从尾盘线约 -27.65% 压到 -10%~-17% 区间，但 120d 真实 T+1 open 的最佳配置交易数只有 30-48，略低于 50 笔晋级门槛。本轮目标是在不破坏 DD/PF 的前提下扩充样本和交易数。",
+  "hypothesis": "强趋势池回踩确认的 alpha 来自更好的入场结构。通过扩大候选池、适度放宽回踩/确认条件、或调整 max_positions，可以把 120d 交易数提高到 50+，同时保持 max_drawdown <= -18%、PF > 1.4、return >= 8%。",
+  "background": {
+    "source_of_truth": "GitHub caiku repo. Always pull latest from C:\\Users\\56440\\.claude\\caiku-sync before reading/writing results.",
+    "must_read_first": [
+      "C:\\Users\\56440\\v8_desktop\\STRATEGY_WORKLOG.md",
+      "C:\\Users\\56440\\v8_desktop\\backtest_queue\\done\\pullback_confirmation_fix_rerun_001_result.json",
+      "C:\\Users\\56440\\v8_desktop\\reports\\pullback_confirmation_fix_rerun_20260609_180755.json",
+      "C:\\Users\\56440\\v8_desktop\\reports\\pullback_confirmation_fix_rerun_full_20260609_180755.json",
+      "C:\\Users\\56440\\v8_desktop\\reports\\pullback_confirmation_fix_rerun_summary_20260609_180755.md",
+      "C:\\Users\\56440\\v8_desktop\\run_pullback_confirmation_backtest.py"
+    ],
+    "fixed_baseline": {
+      "tail_120d_pp20_mp2": {
+        "return": 25.77,
+        "max_drawdown": -27.65,
+        "r_dd": 0.93,
+        "pf": 1.81,
+        "trades": 139
+      },
+      "tail_120d_pp15_mp2": {
+        "return": 17.40,
+        "max_drawdown": -25.51,
+        "r_dd": 0.68,
+        "pf": 1.71,
+        "trades": 141
+      }
+    },
+    "best_120d_clues": [
+      {
+        "config": "TP_RANK|lower_shadow_reclaim|close_above_ma20|t1_open|hold_8d|pp15|mp2",
+        "return": 10.81,
+        "max_drawdown": -10.76,
+        "r_dd": 1.00,
+        "pf": 2.39,
+        "win_rate": 56.7,
+        "trades": 30,
+        "note": "Excellent DD/PF, but too few trades."
+      },
+      {
+        "config": "TP_RANK|no_chase|close_positive_after_pullback|t1_open|hold_5d|pp15|mp2",
+        "return": 8.06,
+        "max_drawdown": -15.44,
+        "r_dd": 0.52,
+        "pf": 1.60,
+        "win_rate": 45.8,
+        "trades": 48,
+        "note": "Closest to full promotion; needs only slightly more trades."
+      },
+      {
+        "config": "TP_RANK|touch_reclaim_ma20|none|t1_open|hold_8d|pp10|mp3",
+        "return": 14.74,
+        "max_drawdown": -15.43,
+        "r_dd": 0.96,
+        "pf": 2.49,
+        "win_rate": 57.8,
+        "trades": 45,
+        "note": "Touch-reclaim should not be permanently rejected after fix rerun."
+      },
+      {
+        "config": "TP_RANK|no_chase|close_positive_after_pullback|t1_open|hold_8d|pp10|mp3",
+        "return": 11.77,
+        "max_drawdown": -17.49,
+        "r_dd": 0.67,
+        "pf": 2.38,
+        "win_rate": 55.6,
+        "trades": 45,
+        "note": "Good return/PF, DD close to threshold."
+      }
+    ],
+    "current_decision": [
+      "Pullback confirmation is now the most promising strategy line.",
+      "It may enter paper trading observation, but not full live mainline until 120d trade count and robustness improve.",
+      "Do not return to tail-entry high-beta optimization unless explicitly requested."
+    ]
+  },
+  "requested_work": [
+    {
+      "step": 1,
+      "description": "Create a new standalone script, recommended name run_pullback_confirmation_expand_sample.py. Reuse the fixed windowing, fixed baseline comparison, and full-results output behavior from the fix rerun. Do not use the older flawed baseline/window logic."
+    },
+    {
+      "step": 2,
+      "description": "Primary test must be 120d, realistic T+1 open entry. 90d is reference only. Do not call a 90d-only result promoted."
+    },
+    {
+      "step": 3,
+      "description": "Expand trade count cautiously. Test universe/top pool expansion if feasible: CSI300 top 60 baseline, plus top 80/top 100/top 150 or all CSI300 if runtime/data allow. Report actual universe size and whether kline/factor coverage drops."
+    },
+    {
+      "step": 4,
+      "description": "Test trend-pool relaxations around TP_RANK: d3 >= 8/7/6, ret_20d >= 0/-2, daily rank top 20/30/40 by z(d3)+z(ma20_gap), and optional ma20_above_ma60 / price_above_ma60 gates. Keep the original strict TP_RANK as control."
+    },
+    {
+      "step": 5,
+      "description": "Test pullback families that survived or nearly survived: lower_shadow_reclaim, no_chase, touch_reclaim_ma20, shallow_pullback, shrink_pullback. For lower_shadow_reclaim, test threshold variants if lower_shadow_pct is available. For no_chase, vary exclusion of close near 20d high and large same-day gain."
+    },
+    {
+      "step": 6,
+      "description": "Confirmation variants: close_above_ma20, close_positive_after_pullback, none, and volume_reexpand if available. Do not add many new exotic confirmations; the goal is sample expansion around known promising rules."
+    },
+    {
+      "step": 7,
+      "description": "Exit variants: hold_5d_close, hold_8d_close, hold_10d_close. Include ma20_or_pullback_low_break_then_hold5 only as a control because prior 120d trades>=50 variants with this exit had DD above target."
+    },
+    {
+      "step": 8,
+      "description": "Position constraints: pp10 and pp15 are primary; pp20 is stress only. max_positions=2 and 3. If mp3 increases trades but pushes DD above -18%, do not promote it."
+    },
+    {
+      "step": 9,
+      "description": "Optional environment tag: report performance with and without csi_dd20_le_5 as a weak warning overlay, but do not make it the main solution if it reduces trade count below 50."
+    },
+    {
+      "step": 10,
+      "description": "Write full all_results. Then rank separately: (A) 120d promoted candidates trades>=50; (B) 120d near-promoted candidates trades 45-49; (C) 120d low-trade high-quality candidates trades 30-44; (D) 90d reference. Do not hide failed high-trade configs."
+    },
+    {
+      "step": 11,
+      "description": "Promotion standard: 120d, T+1 open, trades>=50, max_drawdown <= -18%, PF > 1.4, total_return >= 8%, first/second halves both positive or at least not contradictory, and DD not merely reduced by very low exposure. Near-promotion standard: trades 45-49 with all other metrics passing."
+    },
+    {
+      "step": 12,
+      "description": "Final recommendation must answer: can the 120d trade-count problem be solved without breaking DD; which rule family should become paper-trading config; whether to accept trades>=45 as enough for observation; and what the next task should be."
+    }
+  ],
+  "must_output": {
+    "raw_report_json": "C:\\Users\\56440\\v8_desktop\\reports\\pullback_confirmation_expand_sample_<timestamp>.json",
+    "full_results_json_or_csv": "C:\\Users\\56440\\v8_desktop\\reports\\pullback_confirmation_expand_sample_full_<timestamp>.(json|csv)",
+    "summary_markdown": "C:\\Users\\56440\\v8_desktop\\reports\\pullback_confirmation_expand_sample_summary_<timestamp>.md",
+    "queue_result_json": "C:\\Users\\56440\\v8_desktop\\backtest_queue\\done\\pullback_confirmation_expand_sample_001_result.json"
+  },
+  "metrics_required": [
+    "config_name",
+    "universe_size",
+    "trend_pool_rule",
+    "pullback_rule",
+    "confirmation_rule",
+    "entry_mode",
+    "exit_rule",
+    "window_days",
+    "actual_entry_date_range",
+    "position_pct",
+    "max_positions",
+    "total_return",
+    "max_drawdown",
+    "return_to_drawdown",
+    "profit_factor",
+    "win_rate",
+    "trade_count",
+    "trade_count_ratio_vs_tail_baseline",
+    "avg_cash_usage",
+    "avg_trade_return",
+    "median_trade_return",
+    "avg_win",
+    "avg_loss",
+    "longest_loss_streak",
+    "worst_trade",
+    "best_trade",
+    "worst_10_trades",
+    "top_10_trades",
+    "first_half_metrics",
+    "second_half_metrics",
+    "baseline_same_window_position_metrics",
+    "promotion_bucket",
+    "reason_to_promote_or_reject"
+  ],
+  "questions_for_cc": [
+    "Can 120d realistic T+1 open pullback confirmation reach trades>=50 while keeping DD<=18%, PF>1.4, return>=8%?",
+    "Which expansion helps most without breaking DD: larger universe, wider trend pool, looser pullback, mp3, or longer hold?",
+    "Does lower_shadow_reclaim remain the best quality rule after sample expansion?",
+    "Does no_chase remain the closest fully tradable rule?",
+    "Is touch_reclaim_ma20 genuinely rehabilitated after the fixed rerun, or was its good result specific to hold_8d?",
+    "Should paper trading use the strict low-DD config, the near-promoted higher-trade config, or both as separate lanes?"
+  ],
+  "constraints": [
+    "No future leakage. Signal must use data visible at or before signal-date close; entry is T+1 open for primary results.",
+    "Do not restore V9 total score as sole buy signal.",
+    "Do not use T-close optimistic results for promotion.",
+    "Do not promote configs with DD > -18% even if return is high.",
+    "Do not hide the trade-count / exposure tradeoff.",
+    "Do not overwrite prior reports; use timestamped files.",
+    "Write results into the caiku/v8_desktop reports and backtest_queue/done paths."
+  ],
+  "done_when": [
+    "backtest_queue\\done\\pullback_confirmation_expand_sample_001_result.json exists",
+    "reports contains raw summary and full-results file",
+    "summary explicitly says whether any 120d T+1 open config achieved trades>=50 with DD<=18, PF>1.4, return>=8",
+    "summary identifies the paper-trading observation config(s)"
+  ]
+}

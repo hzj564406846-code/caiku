@@ -984,6 +984,35 @@ Next:
 - 120d DD ~-11%, well within acceptable live range.
 - Keep `TP_TOP20 + shallow_pullback + close_positive_after_pullback + hold_5d + pp10` as ultra-conservative variant.
 
+### 2026-06-09 18:35: Pullback Confirmation Expand-Sample Task Issued
+
+Task issued in caiku:
+
+- `backtest_queue/pending/pullback_confirmation_expand_sample_001.json`
+
+Context:
+
+- Fixed rerun confirmed the pullback-confirmation structure materially reduces drawdown.
+- Best 120d low-DD candidate: `TP_RANK|lower_shadow_reclaim|close_above_ma20|t1_open|hold_8d|pp15|mp2`: return `+10.81%`, DD `-10.76%`, PF `2.39`, trades `30`.
+- Closest 120d near-promotion candidate: `TP_RANK|no_chase|close_positive_after_pullback|t1_open|hold_5d|pp15|mp2`: return `+8.06%`, DD `-15.44%`, PF `1.60`, trades `48`.
+
+Research question:
+
+- Can the 120d realistic T+1 open trade count be expanded to `>=50` without breaking DD `<= -18%`, PF `>1.4`, and return `>=8%`?
+
+Required direction:
+
+- Expand sample cautiously via universe size, trend-pool thresholds, pullback-rule variants, and mp2/mp3 comparisons.
+- Do not go back to tail-entry high-beta optimization.
+- Do not promote T-close optimistic results.
+- Preserve full results for audit.
+
+Decision standard:
+
+- Full promotion: 120d, T+1 open, trades `>=50`, DD `<= -18%`, PF `>1.4`, return `>=8%`, stable halves.
+- Near-promotion: trades `45-49` with all other metrics passing.
+- If trade count can only be increased by allowing DD above target, keep the strict low-DD config as paper-trading observation only.
+
 After every important decision, append a dated note with:
 
 - Context.

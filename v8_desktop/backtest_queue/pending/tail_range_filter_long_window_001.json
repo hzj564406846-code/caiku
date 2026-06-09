@@ -1,0 +1,124 @@
+{
+  "id": "tail_range_filter_long_window_001",
+  "created_at": "2026-06-08T23:55:00+08:00",
+  "created_by": "codex",
+  "project_root": "C:\\Users\\56440\\v8_desktop",
+  "priority": "high",
+  "purpose": "用 90/120 天长窗口验证 base_no_range_gt8（排除T日振幅>8%）是否是稳定改进，而不是40天牛市窗口的偶然结果。若稳定，后续才接入每日扫描；若不稳定，仅作为观察标签。",
+  "background": {
+    "previous_task": "tail_factor_risk_search_001",
+    "previous_result_files": [
+      "C:\\Users\\56440\\v8_desktop\\backtest_queue\\done\\tail_factor_risk_search_001_result.json",
+      "C:\\Users\\56440\\v8_desktop\\reports\\tail_factor_risk_search_summary_20260608.md",
+      "C:\\Users\\56440\\v8_desktop\\reports\\tail_factor_risk_search_20260608_234059.json"
+    ],
+    "short_window_finding": {
+      "baseline": {
+        "total_return": 12.74,
+        "max_drawdown": -11.64,
+        "return_to_drawdown": 1.09,
+        "worst_trade": -6.99,
+        "longest_loss_streak": 3
+      },
+      "base_no_range_gt8": {
+        "total_return": 14.29,
+        "max_drawdown": -12.47,
+        "return_to_drawdown": 1.15,
+        "worst_trade": -5.56,
+        "longest_loss_streak": 2
+      },
+      "interpretation": "短窗口中 base_no_range_gt8 改善了 worst_trade 和连亏，但没有改善 max_drawdown，且 r/dd 只提升 0.06，优势很薄。必须长窗口验证。"
+    }
+  },
+  "requested_work": [
+    {
+      "step": 1,
+      "description": "读取上一轮 tail_factor_risk_search 结果和 run_tail_factor_risk_search.py。不要新增更多参数，不要继续搜索其他过滤规则；本轮只验证 baseline vs base_no_range_gt8。"
+    },
+    {
+      "step": 2,
+      "description": "新增或扩展长窗口验证脚本，建议命名 run_tail_range_filter_long_window.py；也可复用 run_tail_factor_risk_search.py 加参数，但保持输出清晰。"
+    },
+    {
+      "step": 3,
+      "description": "分别跑 90 天和 120 天窗口。若分钟/日线数据限制导致窗口不足，记录实际可用日期范围和样本数，不要当策略失败。"
+    },
+    {
+      "step": 4,
+      "description": "固定执行框架：dec_E + max_positions=2，position_pct=0.15 和 0.20 都测。重点看 pp20；pp15作为保守观察。"
+    },
+    {
+      "step": 5,
+      "description": "只比较两个规则：baseline=elastic_base；range_filter=base_no_range_gt8（排除 intraday_range_pct > 8% 的 T 日信号）。"
+    },
+    {
+      "step": 6,
+      "description": "做时间稳定性拆分：全窗口、前半段、后半段；如样本足够，也做每20交易日滚动窗口。"
+    },
+    {
+      "step": 7,
+      "description": "追踪 worst trades：列出 baseline 和 range_filter 的 worst 10 trades，判断 range_filter 是否稳定过滤掉最差交易，还是只是换了一批亏损。"
+    },
+    {
+      "step": 8,
+      "description": "明确判断：range_filter 是否满足接入每日扫描的门槛。门槛建议：r/dd 不低于 baseline；worst_trade 改善；longest_loss_streak 不恶化；max_drawdown 不明显恶化；trade_count 不低于 baseline 的80%。"
+    }
+  ],
+  "recommended_matrix": {
+    "windows_days": [90, 120],
+    "rules": ["elastic_base", "base_no_range_gt8"],
+    "exit_rule": "dec_E",
+    "max_positions": [2],
+    "position_pct": [0.15, 0.20],
+    "splits": ["full", "first_half", "second_half", "rolling_20d_if_possible"]
+  },
+  "must_output": {
+    "raw_report_json": "C:\\Users\\56440\\v8_desktop\\reports\\tail_range_filter_long_window_<timestamp>.json",
+    "summary_markdown": "C:\\Users\\56440\\v8_desktop\\reports\\tail_range_filter_long_window_summary_<timestamp>.md",
+    "queue_result_json": "C:\\Users\\56440\\v8_desktop\\backtest_queue\\done\\tail_range_filter_long_window_001_result.json"
+  },
+  "metrics_required": [
+    "window_days",
+    "actual_date_range",
+    "rule_name",
+    "position_pct",
+    "split",
+    "total_return",
+    "max_drawdown",
+    "return_to_drawdown",
+    "trade_count",
+    "filtered_signal_count",
+    "trade_count_ratio_vs_baseline",
+    "win_rate",
+    "avg_trade_return",
+    "median_trade_return",
+    "profit_factor",
+    "longest_loss_streak",
+    "worst_trade",
+    "best_trade",
+    "worst_10_trades",
+    "filtered_baseline_worst_count",
+    "max_concurrent_positions",
+    "avg_cash_usage"
+  ],
+  "questions_for_cc": [
+    "base_no_range_gt8 在 90/120 天窗口里是否仍然提升 return_to_drawdown？",
+    "它是否稳定改善 worst_trade 和 longest_loss_streak？",
+    "它是否导致 max_drawdown 恶化？恶化幅度是否可接受？",
+    "前半段和后半段是否都有效，还是只在某一段有效？",
+    "是否建议把该过滤接入每日扫描？如果接入，是作为硬过滤、降级标签，还是仅观察提示？"
+  ],
+  "constraints": [
+    "不要继续调参，不要尝试新的过滤组合。",
+    "不要使用未来函数。",
+    "不要大规模新拉 Tushare。",
+    "如果样本不足，明确标记统计不显著。",
+    "不要把一个窗口里偶然变好当成稳定结论。",
+    "如果修改代码，优先新增独立脚本，并在摘要里列出文件。"
+  ],
+  "done_when": [
+    "done目录出现 tail_range_filter_long_window_001_result.json",
+    "reports目录出现完整JSON和Markdown摘要",
+    "摘要明确回答：base_no_range_gt8 是否可以接入每日扫描，以及接入方式是硬过滤、降级标签还是观察提示"
+  ]
+}

@@ -1,0 +1,207 @@
+{
+  "id": "pullback_confirmation_001",
+  "created_at": "2026-06-09T16:45:00+08:00",
+  "created_by": "codex",
+  "project_root": "C:\\Users\\56440\\v8_desktop",
+  "priority": "high",
+  "purpose": "启动新的策略线：强趋势股票池的回踩确认。前九轮尾盘高弹性趋势线已经确认有 alpha，但 pp20 长窗口最大回撤约 -25%~-28%，且因子、止损、市场择时均无法把 DD 降到实盘友好范围。本轮不继续追强尾盘优化，而是验证：用 d3+ma20_gap 找强趋势股票池，等待回踩 MA20/前高/缩量企稳后再入场，是否能在保留正收益的同时显著降低最大回撤。",
+  "hypothesis": "强趋势股票在上涨趋势中出现可控回踩并确认企稳后，后续 3-8 个交易日的收益/回撤结构优于尾盘直接追高弹性股；最大回撤应主要来自入场结构改善，而不是机械止损优化。",
+  "background": {
+    "must_read_first": [
+      "C:\\Users\\56440\\v8_desktop\\STRATEGY_WORKLOG.md",
+      "C:\\Users\\56440\\v8_desktop\\backtest_queue\\done\\tail_factor_combo_long_window_001_result.json",
+      "C:\\Users\\56440\\v8_desktop\\backtest_queue\\done\\tail_market_timing_filter_001_result.json",
+      "C:\\Users\\56440\\v8_desktop\\reports\\tail_factor_combo_long_window_summary_20260609.md",
+      "C:\\Users\\56440\\v8_desktop\\reports\\tail_market_timing_filter_summary_20260609.md",
+      "C:\\Users\\56440\\v8_desktop\\factor_registry.py",
+      "C:\\Users\\56440\\v8_desktop\\run_factor_research.py",
+      "C:\\Users\\56440\\v8_desktop\\run_tail_portfolio_backtest.py"
+    ],
+    "tail_line_conclusion": {
+      "best_factor": "d3 + ma20_gap",
+      "tail_execution": "dec_E + max_positions=2",
+      "pp20_120d_approx": {
+        "total_return": 25.4,
+        "max_drawdown": -27.4,
+        "return_to_drawdown": 0.93,
+        "profit_factor": 1.75,
+        "trade_count": 139
+      },
+      "decision": "Keep tail-entry high-beta trend line as observation / risk-on tactical signal only, not an active auto-execution main strategy."
+    },
+    "useful_existing_factors": [
+      "d3",
+      "ma20_gap",
+      "ret_20d",
+      "ret_5d",
+      "price_above_ma20",
+      "price_above_ma60",
+      "ma20_above_ma60",
+      "ma5_above_ma20",
+      "volume_ratio",
+      "vol5_vs_vol20",
+      "lower_shadow_pct",
+      "upper_shadow_pct",
+      "body_pct",
+      "shrinking_bear_flag",
+      "hammer_flag",
+      "oversold_5d",
+      "pullback_factor"
+    ],
+    "factors_to_treat_carefully": [
+      "atr_pct is not alpha in the long-window tail line; it may be used for stop distance / volatility sizing, not as positive selection alpha.",
+      "market breadth filters have repeatedly worsened this strategy family; do not make breadth a required gate unless the result proves otherwise.",
+      "V9 total score must remain a benchmark/explanation only, not the sole buy signal."
+    ]
+  },
+  "requested_work": [
+    {
+      "step": 1,
+      "description": "Create a standalone script, recommended name run_pullback_confirmation_backtest.py. Do not modify production advisor logic in this task. Reuse existing kline cache/factor-table patterns where possible, with kline_count=600 and repaired long-window handling."
+    },
+    {
+      "step": 2,
+      "description": "Use the same stock universe scale as recent tests for comparability: CSI300 top 60 if available. Windows must include 90 and 120 trading days. If feasible, also include a longer available window after kline_count=600; report actual date range and effective trading days."
+    },
+    {
+      "step": 3,
+      "description": "Define a strong-trend candidate pool using point-in-time data only. Required base pool examples: A) d3+ma20_gap top ranked with d3>=8 and ret_20d>=0; B) price_above_ma60 and ma20_above_ma60 with d3>=8; C) d3+ma20_gap top 20% per day. Compare against the previous tail-entry d3+ma20_gap baseline."
+    },
+    {
+      "step": 4,
+      "description": "Define pullback conditions separately from trend pool. Required variants: near_ma20 = ma20_gap between -3% and +3%; shallow_pullback = ret_5d between -8% and +1% while ret_20d remains positive; touch_reclaim_ma20 = low <= MA20 and close >= MA20 if MA20 can be reconstructed; shrink_pullback = negative/flat 3-5d return with volume_ratio <= 1.2; no_chase = exclude close near 20d high or daily gain too large; lower_shadow_reclaim if lower_shadow_pct is available."
+    },
+    {
+      "step": 5,
+      "description": "Define confirmation conditions and test them separately. Required variants: close_above_ma20, close_above_prior_day_high after pullback, close_positive_after_pullback, volume_reexpand after shrink, hammer_or_lower_shadow, and no_confirmation baseline. Do not overfit; report each rule's exact formula."
+    },
+    {
+      "step": 6,
+      "description": "Entry price realism is critical. Test at least two entry modes: optimistic T close after confirmation, and realistic T+1 open after confirmation. Promote only if the realistic T+1 open version is acceptable. If T+1 open gaps are unavailable for some rows, report drop count."
+    },
+    {
+      "step": 7,
+      "description": "Exit rules: test simple holding periods first, not many optimized stops. Required exits: hold_3d_close, hold_5d_close, hold_8d_close. Also test one simple protective exit: exit if close breaks pullback low or MA20 by more than 2%, otherwise hold_5d. ATR may only be used for stop distance as a risk tool, not as alpha."
+    },
+    {
+      "step": 8,
+      "description": "Portfolio constraints: max_positions=2 and max_positions=3; position_pct=0.10, 0.15, 0.20. Because the goal is drawdown reduction, pp10/pp15 are important, not just pp20. Enforce China A-share lot sizing and same cost/slippage assumptions as previous scripts."
+    },
+    {
+      "step": 9,
+      "description": "Rank results by live usability, not total return. Primary target: 120d max_drawdown <= -18% for pp15 or pp20, PF > 1.4, positive total_return preferably >= 8%, trade_count >= 50, first/second half both not broken. Secondary target: return_to_drawdown meaningfully better than tail baseline."
+    },
+    {
+      "step": 10,
+      "description": "Compare directly against the tail-entry d3+ma20_gap baseline: same window, same universe, same position sizing where possible. Report whether pullback confirmation reduced worst-trade clusters, reduced loss streaks, or merely reduced trade frequency."
+    },
+    {
+      "step": 11,
+      "description": "Output top 20 configurations, plus a rejection table for common failed variants. Include worst 10 trades and top 10 trades for baseline and best pullback config. Include monthly or half-window stability."
+    },
+    {
+      "step": 12,
+      "description": "Final recommendation must answer: should pullback confirmation become the next active strategy line; which rule set should be researched next; which existing factors are useful in this line; whether D1/D2/sector_hot should be reserved for a separate theme-hot-money line instead."
+    }
+  ],
+  "recommended_rule_grid": {
+    "trend_pools": [
+      "trend_pool_rank_d3_ma20gap_d3_ge_8_ret20_ge_0",
+      "trend_pool_ma60_ma20_structure_d3_ge_8",
+      "trend_pool_top20pct_d3_ma20gap"
+    ],
+    "pullback_conditions": [
+      "near_ma20",
+      "shallow_pullback",
+      "touch_reclaim_ma20",
+      "shrink_pullback",
+      "no_chase",
+      "lower_shadow_reclaim"
+    ],
+    "confirmation_conditions": [
+      "none",
+      "close_above_ma20",
+      "close_positive_after_pullback",
+      "close_above_prior_high",
+      "volume_reexpand",
+      "hammer_or_lower_shadow"
+    ],
+    "entry_modes": [
+      "t_close_optimistic",
+      "t1_open_realistic"
+    ],
+    "exits": [
+      "hold_3d_close",
+      "hold_5d_close",
+      "hold_8d_close",
+      "ma20_or_pullback_low_break_then_hold5"
+    ],
+    "max_positions": [2, 3],
+    "position_pct": [0.10, 0.15, 0.20],
+    "windows_trading_days": [90, 120]
+  },
+  "must_output": {
+    "raw_report_json": "C:\\Users\\56440\\v8_desktop\\reports\\pullback_confirmation_<timestamp>.json",
+    "summary_markdown": "C:\\Users\\56440\\v8_desktop\\reports\\pullback_confirmation_summary_<timestamp>.md",
+    "queue_result_json": "C:\\Users\\56440\\v8_desktop\\backtest_queue\\done\\pullback_confirmation_001_result.json"
+  },
+  "metrics_required": [
+    "config_name",
+    "trend_pool_rule",
+    "pullback_rule",
+    "confirmation_rule",
+    "entry_mode",
+    "exit_rule",
+    "window_days",
+    "actual_date_range",
+    "position_pct",
+    "max_positions",
+    "total_return",
+    "max_drawdown",
+    "return_to_drawdown",
+    "profit_factor",
+    "win_rate",
+    "trade_count",
+    "trade_count_ratio_vs_tail_baseline",
+    "avg_trade_return",
+    "median_trade_return",
+    "avg_win",
+    "avg_loss",
+    "longest_loss_streak",
+    "worst_trade",
+    "best_trade",
+    "worst_10_trades",
+    "top_10_trades",
+    "avg_cash_usage",
+    "max_concurrent_positions",
+    "first_half_metrics",
+    "second_half_metrics",
+    "reason_to_promote_or_reject"
+  ],
+  "questions_for_cc": [
+    "Does strong-trend pullback confirmation reduce maximum drawdown materially versus tail-entry d3+ma20_gap?",
+    "Can any realistic T+1 open configuration reach 120d max_drawdown <= -18% with PF>1.4 and enough trades?",
+    "Which part matters most: trend pool, pullback definition, confirmation condition, entry timing, or exit holding period?",
+    "Does pullback confirmation preserve alpha or simply reduce trade count?",
+    "Are D3 and ma20_gap still the useful core factors in this new structure?",
+    "Do volume/K-line confirmation factors add value after the pullback condition?",
+    "Should D1/D2/sector_hot be added to this line, or kept for a separate theme-hot-money strategy line?",
+    "What is the next best task if pullback confirmation works? What is the next best task if it fails?"
+  ],
+  "constraints": [
+    "No future leakage. Signal date may only use data available at that date close or earlier. T+1 open entry is the realistic decision path after an after-close scan.",
+    "Do not restore V9 total score as the sole buy signal.",
+    "Do not optimize dozens of stop thresholds. This is an entry-structure test, not another stop-loss search.",
+    "Do not treat atr_pct as positive alpha; use it only for risk distance/sizing if needed.",
+    "Do not promote configurations with fewer than 50 trades unless explicitly labeled exploratory.",
+    "Do not promote a configuration that works only in one half of the 120d window.",
+    "Do not hide trade-count collapse; lower DD caused only by no trades is not success.",
+    "Write outputs to reports and backtest_queue/done exactly as specified."
+  ],
+  "done_when": [
+    "backtest_queue\\done\\pullback_confirmation_001_result.json exists",
+    "reports contains full JSON and Markdown summary",
+    "summary directly compares best pullback config against tail-entry d3+ma20_gap baseline",
+    "summary clearly states whether pullback confirmation should become the next active strategy line"
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "id": "tail_1400_decision_001",
+  "created_at": "2026-06-08T16:14:00+08:00",
+  "created_by": "codex",
+  "project_root": "C:\\Users\\56440\\v8_desktop",
+  "priority": "high",
+  "purpose": "验证尾盘买入后，T+1 14:00 作为去留决策点是否优于固定卖出。注意：本任务不是重做普通持仓回测，而是贴近真实执行方式的短线执行层回测。",
+  "background": {
+    "strategy_frame": "盘前选池 -> 盘中观察 -> T日尾盘确认买入 -> T+1 14:00 判断去留 -> 弱则卖，强则持有到收盘或T+2。",
+    "current_findings": [
+      "T+1开盘卖为负，不代表用户想要的隔天处理方式。",
+      "T+1 10:30处理为正但偏早。",
+      "T+1 14:00处理比开盘和10:30更符合逻辑，近阶段 elastic_base avg约+0.358%，胜率约53.1%。",
+      "T+1收盘和T+2收盘更强，所以14:00应是去留决策点，不是机械卖点。"
+    ],
+    "existing_reports": [
+      "C:\\Users\\56440\\v8_desktop\\reports\\tail_entry_backtest_summary_20260608.md",
+      "C:\\Users\\56440\\v8_desktop\\reports\\tail_entry_backtest_20260608_160252.json"
+    ]
+  },
+  "requested_work": [
+    {
+      "step": 1,
+      "description": "阅读现有 run_tail_entry_backtest.py，确认 t1_minute 字段代表 --minute-exit-time 指定的 T+1 分钟退出价。不要推翻现有脚本，只做必要的小改动。"
+    },
+    {
+      "step": 2,
+      "description": "新增或扩展一个 14:00 条件决策出口，例如 t1_1400_decision / t1_minute_decision。规则第一版保持简单可验证。"
+    },
+    {
+      "step": 3,
+      "description": "建议先测试这些决策规则组合：A. 固定14:00卖；B. 14:00收益<=-2%卖，否则T+1收盘卖；C. 14:00跌破T日低点卖，否则T+1收盘卖；D. 14:00收益>0且未跌破T日低点则持有到T+2，否则T+1收盘或14:00卖；E. 14:00收益<=-2%或跌破T日低点卖，否则持有到T+2。"
+    },
+    {
+      "step": 4,
+      "description": "至少比较 elastic_base、elastic_d3、elastic_d3_sector。重点看 elastic_base，因为前面 sector_hot 代理可能拖累。"
+    },
+    {
+      "step": 5,
+      "description": "跑近阶段分钟线可覆盖样本。推荐命令基线：python run_tail_entry_backtest.py --days 45 --top 60 --select 5 --threads 8 --kline-count 260 --minute-exit-time 14:00。若你新增了参数，请在结果里记录实际命令。"
+    },
+    {
+      "step": 6,
+      "description": "如时间允许，再跑不同 select=3/5/10 和止损阈值 -1.5%/-2%/-3%，观察是否是稳定平台，不要只报最漂亮结果。"
+    }
+  ],
+  "must_output": {
+    "raw_report_json": "保存到 C:\\Users\\56440\\v8_desktop\\reports\\，文件名建议 tail_1400_decision_<timestamp>.json",
+    "summary_markdown": "保存到 C:\\Users\\56440\\v8_desktop\\reports\\tail_1400_decision_summary_<timestamp>.md",
+    "queue_result_json": "保存到 C:\\Users\\56440\\v8_desktop\\backtest_queue\\done\\tail_1400_decision_001_result.json"
+  },
+  "metrics_required": [
+    "每种策略/出口的样本数 n",
+    "平均收益 avg",
+    "中位数 median",
+    "胜率 win_rate",
+    "profit_factor",
+    "worst/best",
+    "最大回撤 max_drawdown",
+    "曲线总收益 total_return",
+    "固定14:00、T+1收盘、T+2收盘、14:00条件决策之间的横向对比",
+    "是否存在持仓重叠/资金占用未模拟的局限说明"
+  ],
+  "questions_for_cc": [
+    "你认为14:00去留规则里，最应该先验证的条件是什么？收益阈值、跌破T日低点、低于均价/VWAP、还是板块退潮？",
+    "在免费数据限制下，分钟线只覆盖近阶段，你建议如何避免这个结果过拟合？",
+    "你是否建议下一轮优先做真实资金占用/持仓上限，还是先扩展更多分钟数据源？"
+  ],
+  "constraints": [
+    "不要把尾盘策略当成整个项目，它只是执行层验证功能。",
+    "不要用T+1开盘卖代表用户需求。",
+    "不要把无分钟数据或接口失败当成策略失败。",
+    "不要记录或输出任何用户账号密码。",
+    "如果修改代码，保持小范围改动，并在summary里列出文件和关键函数。"
+  ],
+  "done_when": [
+    "结果文件写入 backtest_queue\\done",
+    "reports 下有完整 JSON 和 Markdown 摘要",
+    "摘要明确回答：14:00条件决策是否比固定14:00卖、T+1收盘卖、T+2收盘卖更值得继续研究"
+  ]
+}

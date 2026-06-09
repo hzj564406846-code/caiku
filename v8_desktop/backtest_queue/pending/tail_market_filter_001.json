@@ -1,0 +1,130 @@
+{
+  "id": "tail_market_filter_001",
+  "created_at": "2026-06-08T23:20:00+08:00",
+  "created_by": "codex",
+  "project_root": "C:\\Users\\56440\\v8_desktop",
+  "priority": "high",
+  "purpose": "在当前最佳尾盘短线执行规则 dec_E + max_positions=2 + position_pct=15/20% 基础上，加入市场环境过滤，验证能否把最大回撤从约 -11.64% 压到 -6%~-8%，同时保留可接受收益。",
+  "background": {
+    "previous_task": "tail_position_sizing_001",
+    "previous_result_files": [
+      "C:\\Users\\56440\\v8_desktop\\backtest_queue\\done\\tail_position_sizing_001_result.json",
+      "C:\\Users\\56440\\v8_desktop\\reports\\tail_portfolio_backtest_summary_20260608.md",
+      "C:\\Users\\56440\\v8_desktop\\reports\\tail_portfolio_backtest_20260608_230404.json"
+    ],
+    "current_best_rule": {
+      "exit_rule": "dec_E",
+      "max_positions": 2,
+      "position_pct": 0.20,
+      "total_return": 12.74,
+      "max_drawdown": -11.64,
+      "win_rate": 60.0,
+      "profit_factor": 3.27,
+      "trade_count": 35,
+      "longest_loss_streak": 3
+    },
+    "current_assessment": "收益有苗头，但收益/回撤比约1.09，不够实盘重仓。下一步优先降低回撤，而不是继续优化卖点。"
+  },
+  "requested_work": [
+    {
+      "step": 1,
+      "description": "先读取上一轮持仓约束结果和 run_tail_portfolio_backtest.py。不要继续调卖点，本轮只测市场环境过滤。"
+    },
+    {
+      "step": 2,
+      "description": "扩展或新增市场环境过滤版本，建议小范围修改 run_tail_portfolio_backtest.py 或新增 run_tail_market_filter_backtest.py。保持原脚本可用。"
+    },
+    {
+      "step": 3,
+      "description": "基准策略固定为 elastic_base + dec_E，max_positions=2，position_pct分别测试 0.15 和 0.20。baseline 必须复现上一轮结果。"
+    },
+    {
+      "step": 4,
+      "description": "测试 CSI300 趋势过滤：A. CSI300 close < MA20 时不开新仓；B. CSI300 20日收益 < 0 时不开新仓；C. close>=MA20 且 20日收益>=0 才开仓。"
+    },
+    {
+      "step": 5,
+      "description": "测试市场宽度过滤：基于已有历史宽度函数或可复用 kline_dict 计算当日上涨比例。分别测试 breadth_up_ratio >= 45% 和 >= 50% 才开仓。"
+    },
+    {
+      "step": 6,
+      "description": "测试组合过滤：CSI300趋势 + 市场宽度。至少比较 ma20+breadth45、ma20+breadth50、ma20+ret20+breadth45、ma20+ret20+breadth50。"
+    },
+    {
+      "step": 7,
+      "description": "可选测试隔夜美股科技风险过滤。如果本地历史数据不可得，不要硬造；可以只在摘要中说明需要未来补历史美股科技风险数据。"
+    },
+    {
+      "step": 8,
+      "description": "输出每种过滤规则过滤掉的候选数量/交易数量，并判断它是过滤掉风险，还是只是过滤掉收益。"
+    }
+  ],
+  "recommended_matrix": {
+    "factor_specs": ["elastic_base"],
+    "exit_rules": ["dec_E"],
+    "max_positions": [2],
+    "position_pct": [0.15, 0.20],
+    "filters": [
+      "none",
+      "csi_ma20",
+      "csi_ret20_nonnegative",
+      "csi_ma20_and_ret20",
+      "breadth45",
+      "breadth50",
+      "csi_ma20_and_breadth45",
+      "csi_ma20_and_breadth50",
+      "csi_ma20_ret20_and_breadth45",
+      "csi_ma20_ret20_and_breadth50"
+    ],
+    "target": {
+      "desired_total_return": ">=8%",
+      "desired_max_drawdown": "<=8%",
+      "desired_profit_factor": ">2",
+      "desired_win_rate": ">=55%"
+    }
+  },
+  "must_output": {
+    "raw_report_json": "C:\\Users\\56440\\v8_desktop\\reports\\tail_market_filter_backtest_<timestamp>.json",
+    "summary_markdown": "C:\\Users\\56440\\v8_desktop\\reports\\tail_market_filter_backtest_summary_<timestamp>.md",
+    "queue_result_json": "C:\\Users\\56440\\v8_desktop\\backtest_queue\\done\\tail_market_filter_001_result.json"
+  },
+  "metrics_required": [
+    "filter_name",
+    "position_pct",
+    "total_return",
+    "max_drawdown",
+    "return_to_drawdown",
+    "trade_count",
+    "filtered_signal_count",
+    "win_rate",
+    "avg_trade_return",
+    "median_trade_return",
+    "profit_factor",
+    "longest_loss_streak",
+    "worst_trade",
+    "best_trade",
+    "avg_cash_usage",
+    "max_concurrent_positions",
+    "equity_curve_tail"
+  ],
+  "questions_for_cc": [
+    "哪个市场过滤规则最能降低回撤，同时没有过度牺牲收益？",
+    "position_pct=15% 和 20% 在加过滤后哪个更适合实盘观察？",
+    "过滤后收益/最大回撤比是否提升到 1.5 以上？",
+    "如果没有任何过滤能显著改善回撤，请明确说明，不要强行推荐。",
+    "下一轮应该继续做市场过滤、扩展分钟线历史，还是回到因子组合搜索？"
+  ],
+  "constraints": [
+    "不要使用未来函数。市场过滤只能使用 T 日收盘前或 T 日已知数据决定是否尾盘开仓。",
+    "不要改动单股买卖建议主流程。",
+    "不要把美股科技风险历史数据硬造出来；没有就标记 unavailable。",
+    "不要在45天样本上过度优化阈值。",
+    "如果接口或数据缺失，记录缺失数量，不要当策略失败。",
+    "如果修改代码，保持小范围改动，并在摘要里列出文件和关键函数。"
+  ],
+  "done_when": [
+    "done目录出现 tail_market_filter_001_result.json",
+    "reports目录出现完整JSON和Markdown摘要",
+    "摘要明确回答：是否有过滤规则能把回撤压到 -6%~-8%，且保留至少 8% 左右收益"
+  ]
+}

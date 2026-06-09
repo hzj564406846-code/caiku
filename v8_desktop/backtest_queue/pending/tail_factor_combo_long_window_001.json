@@ -1,0 +1,166 @@
+{
+  "id": "tail_factor_combo_long_window_001",
+  "created_at": "2026-06-09T02:55:00+08:00",
+  "created_by": "codex",
+  "project_root": "C:\\Users\\56440\\v8_desktop",
+  "priority": "high",
+  "purpose": "在已修复的90/120交易日数据覆盖上，重新搜索尾盘执行层可用的因子组合。当前 elastic_base 仍有 alpha，但120d pp20 回撤 -28.46%，止损风控无法解决。下一步优先寻找更稳定的因子组合，而不是继续调止损阈值。",
+  "background": {
+    "previous_tasks": [
+      "tail_execution_data_coverage_001",
+      "tail_stop_risk_control_001"
+    ],
+    "previous_result_files": [
+      "C:\\Users\\56440\\v8_desktop\\backtest_queue\\done\\tail_execution_data_coverage_001_result.json",
+      "C:\\Users\\56440\\v8_desktop\\backtest_queue\\done\\tail_stop_risk_control_001_result.json",
+      "C:\\Users\\56440\\v8_desktop\\reports\\tail_execution_data_coverage_summary_20260609.md",
+      "C:\\Users\\56440\\v8_desktop\\reports\\tail_stop_risk_control_summary_20260609.md",
+      "C:\\Users\\56440\\v8_desktop\\STRATEGY_WORKLOG.md"
+    ],
+    "current_baseline": {
+      "factor": "elastic_base = z(atr_pct) + z(ret_20d) + z(ma20_gap)",
+      "execution": "dec_E + max_positions=2",
+      "pp20_120d": {
+        "total_return": 23.01,
+        "max_drawdown": -28.46,
+        "return_to_drawdown": 0.81,
+        "profit_factor": 1.639,
+        "win_rate": 46.4,
+        "trade_count": 140
+      },
+      "pp15_120d": {
+        "total_return": 15.00,
+        "max_drawdown": -25.93,
+        "return_to_drawdown": 0.58,
+        "profit_factor": 1.609,
+        "win_rate": 48.6,
+        "trade_count": 140
+      }
+    },
+    "latest_decisions": [
+      "base_no_range_gt8 已 reject。",
+      "机械止损/风控无法把120d pp20回撤压到可接受范围。",
+      "高级情境化风控问题已记录，但当前优先级是测试其他因子组合。",
+      "不要把最高收益当成唯一目标，重点找更稳的 alpha。"
+    ],
+    "data_coverage": {
+      "valid_trading_days": 120,
+      "date_range": "2025-11-21 ~ 2026-05-25",
+      "kline_count": 600,
+      "raw_factor_rows": 7190,
+      "execution_attach_dropped_rows": 0
+    }
+  },
+  "requested_work": [
+    {
+      "step": 1,
+      "description": "先读取 STRATEGY_WORKLOG.md、factor_registry.py、run_factor_research.py、run_tail_execution_data_coverage.py、run_tail_portfolio_backtest.py、run_tail_stop_risk_control.py。不要重新做数据覆盖修复，不要继续调止损阈值，本轮只做因子组合长窗口验证。"
+    },
+    {
+      "step": 2,
+      "description": "新增独立脚本，建议命名 run_tail_factor_combo_long_window.py。复用已修复的数据逻辑：kline_count=600，窗口90/120交易日，CSI300前60只，执行价字段完整。"
+    },
+    {
+      "step": 3,
+      "description": "固定执行层对照：max_positions=2；position_pct 测 0.15 和 0.20；退出规则至少测原 dec_E。可额外测 pct1.5_or_low 作为边际更优退出对照，但不要让退出规则成为主变量。"
+    },
+    {
+      "step": 4,
+      "description": "候选因子池优先来自 factor_registry.py 的 primitive 与 strategy factors。至少覆盖：d1,d2,d3,d4,d5,d6,d7,score,atr_pct,ret_5d,ret_20d,ma20_gap,volume_ratio,sector_hot,oversold_5d,oversold_20d,downside_risk,trend_factor,hot_money_factor,pullback_factor,oversold_rebound_factor,quality_factor。如果某些因子缺数据，标记 unavailable，不要硬造。"
+    },
+    {
+      "step": 5,
+      "description": "先测单因子，再测二因子组合，再测三因子组合。组合评分使用 date group z-score 后按 FACTOR_DIRECTIONS 方向加权，避免未来函数。不要只测 elastic_base 附近的小变体。"
+    },
+    {
+      "step": 6,
+      "description": "强制包含以下人工候选组合作为命名组合：elastic_base=atr_pct+ret_20d+ma20_gap；trend_elastic=d3+atr_pct+ret_20d；trend_ma=d3+ret_20d+ma20_gap；money_trend=d1+d2+d3；sector_momentum=sector_hot+ret_20d+volume_ratio；oversold_rebound=oversold_5d+oversold_20d+atr_pct；quality_trend=d6+d7+d3+ret_20d。"
+    },
+    {
+      "step": 7,
+      "description": "输出 top 20 组合，排序不能只看 total_return。综合排序建议优先：120d return_to_drawdown、max_drawdown、PF、first/second half一致性、trade_count、worst_trade。高收益但回撤更大的组合必须降级。"
+    },
+    {
+      "step": 8,
+      "description": "做稳定性拆分：90d full、120d full、120d first_half、120d second_half。每个候选组合必须报告 halves 是否同方向有效。若某组合只在一个半段有效，不得作为主推荐。"
+    },
+    {
+      "step": 9,
+      "description": "目标不是一定超过 baseline 收益，而是找到更适合实盘观察的组合。优先寻找：120d max_drawdown 明显低于 baseline（至少改善5pp），return仍为正且最好>=8%，PF>1.4，trade_count不低于baseline 60%，r/dd高于baseline。"
+    },
+    {
+      "step": 10,
+      "description": "追踪 worst trades 和大盈利错失。列出 baseline 与最佳组合的 worst 10 trades、top 10 trades，说明新组合是减少坏交易、错过好交易，还是只是换了一批交易。"
+    },
+    {
+      "step": 11,
+      "description": "明确下一步建议：若找到稳定组合，是否接入每日扫描为新的候选池；若没有，是否应暂停尾盘高弹性趋势线，转向其他策略线（如回踩确认、超跌反弹、题材热钱）。"
+    }
+  ],
+  "recommended_matrix": {
+    "windows_trading_days": [90, 120],
+    "stock_pool": "CSI300 top 60",
+    "kline_count": 600,
+    "exit_rules": ["dec_E", "pct1.5_or_low_optional"],
+    "max_positions": [2],
+    "position_pct": [0.15, 0.20],
+    "combo_sizes": [1, 2, 3],
+    "stability_splits": ["90d_full", "120d_full", "120d_first_half", "120d_second_half"]
+  },
+  "must_output": {
+    "raw_report_json": "C:\\Users\\56440\\v8_desktop\\reports\\tail_factor_combo_long_window_<timestamp>.json",
+    "summary_markdown": "C:\\Users\\56440\\v8_desktop\\reports\\tail_factor_combo_long_window_summary_<timestamp>.md",
+    "queue_result_json": "C:\\Users\\56440\\v8_desktop\\backtest_queue\\done\\tail_factor_combo_long_window_001_result.json"
+  },
+  "metrics_required": [
+    "combo_name",
+    "factors",
+    "combo_size",
+    "exit_rule",
+    "window_days",
+    "actual_date_range",
+    "position_pct",
+    "split",
+    "total_return",
+    "max_drawdown",
+    "return_to_drawdown",
+    "trade_count",
+    "trade_count_ratio_vs_baseline",
+    "win_rate",
+    "avg_trade_return",
+    "median_trade_return",
+    "profit_factor",
+    "longest_loss_streak",
+    "worst_trade",
+    "best_trade",
+    "worst_10_trades",
+    "top_10_trades",
+    "avg_cash_usage",
+    "max_concurrent_positions",
+    "stability_score",
+    "reason_to_promote_or_reject"
+  ],
+  "questions_for_cc": [
+    "是否存在比 elastic_base 更稳的因子组合？稳的定义是回撤更低、r/dd更高、PF不差、halves一致。",
+    "V9拆出来的哪些分子在尾盘执行层里真正有用？哪些会拖累？",
+    "atr_pct 在长窗口中仍是 alpha 来源吗？还是应降低权重或与趋势/资金因子绑定？",
+    "是否有组合能把120d pp20回撤从 -28.46% 改善至少5pp，同时保留正收益和PF>1.4？",
+    "如果 pp20 很难稳，pp15 是否能找到更实盘友好的组合？",
+    "最佳组合是否只是换了一批交易，还是稳定减少了 worst trades？",
+    "下一步应接入每日扫描、继续做高级情境风控，还是转向其他策略线？"
+  ],
+  "constraints": [
+    "不要使用未来函数。所有T日选股因子只能来自T日尾盘可见或更早数据。",
+    "不要继续优化 base_no_range_gt8，它已被 reject。",
+    "不要继续调止损阈值，止损不是本轮主变量。",
+    "不要大规模新拉Tushare财务数据；没有缓存就标记 quality/fundamental unavailable。",
+    "不要只报告最高收益，必须同时报告回撤、PF、r/dd、halves稳定性、worst_trade。",
+    "组合太少、trade_count太低、收益靠单笔极端盈利的结果必须降级。",
+    "输出必须写入 reports 和 backtest_queue/done 固定路径。"
+  ],
+  "done_when": [
+    "backtest_queue\\done\\tail_factor_combo_long_window_001_result.json 存在",
+    "reports 下存在完整 JSON 和 Markdown 摘要",
+    "摘要明确回答：是否找到更稳因子组合、是否替代 elastic_base、是否接入每日扫描、下一轮应该做什么"
+  ]
+}

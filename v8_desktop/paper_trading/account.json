@@ -1,0 +1,30 @@
+{
+  "cash": 15000,
+  "total_deposits": 56303.4,
+  "positions": {
+    "603501": {
+      "name": "豪威集团",
+      "entry_date": "2026-05-21",
+      "entry_price": 102.754,
+      "entry_reason": "锤子线底部确认+半导体板块共振+Q1利空出尽",
+      "stop_loss": 101.0,
+      "target_1": 115.0,
+      "target_2": 125.0,
+      "status": "持有",
+      "shares": 300
+    },
+    "600183": {
+      "name": "生益科技",
+      "entry_date": "2026-05-21",
+      "entry_price": 104.772,
+      "entry_reason": "AI产业链CCL龙头+英伟达Q2指引超预期+M9认证壁垒+Q1净利+105%",
+      "stop_loss": 95.0,
+      "target_1": 115.0,
+      "target_2": 130.0,
+      "status": "持有",
+      "shares": 100
+    }
+  },
+  "closed_trades": [],
+  "daily_snapshots": []
+}

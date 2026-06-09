@@ -1,0 +1,990 @@
+{
+  "000001": {
+    "industry": "J66货币金融服务",
+    "industry_code": ""
+  },
+  "000002": {
+    "industry": "K70房地产业",
+    "industry_code": ""
+  },
+  "000063": {
+    "industry": "C39计算机、通信和其他电子设备制造业",
+    "industry_code": ""
+  },
+  "000100": {
+    "industry": "C39计算机、通信和其他电子设备制造业",
+    "industry_code": ""
+  },
+  "000157": {
+    "industry": "C35专用设备制造业",
+    "industry_code": ""
+  },
+  "000166": {
+    "industry": "J67资本市场服务",
+    "industry_code": ""
+  },
+  "000301": {
+    "industry": "C26化学原料和化学制品制造业",
+    "industry_code": ""
+  },
+  "000333": {
+    "industry": "C38电气机械和器材制造业",
+    "industry_code": ""
+  },
+  "000338": {
+    "industry": "C36汽车制造业",
+    "industry_code": ""
+  },
+  "000408": {
+    "industry": "C26化学原料和化学制品制造业",
+    "industry_code": ""
+  },
+  "000425": {
+    "industry": "C35专用设备制造业",
+    "industry_code": ""
+  },
+  "000538": {
+    "industry": "C27医药制造业",
+    "industry_code": ""
+  },
+  "000568": {
+    "industry": "C15酒、饮料和精制茶制造业",
+    "industry_code": ""
+  },
+  "000596": {
+    "industry": "C15酒、饮料和精制茶制造业",
+    "industry_code": ""
+  },
+  "000617": {
+    "industry": "J66货币金融服务",
+    "industry_code": ""
+  },
+  "000625": {
+    "industry": "C36汽车制造业",
+    "industry_code": ""
+  },
+  "000630": {
+    "industry": "C32有色金属冶炼和压延加工业",
+    "industry_code": ""
+  },
+  "000651": {
+    "industry": "C38电气机械和器材制造业",
+    "industry_code": ""
+  },
+  "000661": {
+    "industry": "C27医药制造业",
+    "industry_code": ""
+  },
+  "000708": {
+    "industry": "C31黑色金属冶炼和压延加工业",
+    "industry_code": ""
+  },
+  "000725": {
+    "industry": "C39计算机、通信和其他电子设备制造业",
+    "industry_code": ""
+  },
+  "000768": {
+    "industry": "C37铁路、船舶、航空航天和其他运输设备制造业",
+    "industry_code": ""
+  },
+  "000776": {
+    "industry": "J67资本市场服务",
+    "industry_code": ""
+  },
+  "000786": {
+    "industry": "C30非金属矿物制品业",
+    "industry_code": ""
+  },
+  "000792": {
+    "industry": "C26化学原料和化学制品制造业",
+    "industry_code": ""
+  },
+  "000807": {
+    "industry": "C32有色金属冶炼和压延加工业",
+    "industry_code": ""
+  },
+  "000858": {
+    "industry": "C15酒、饮料和精制茶制造业",
+    "industry_code": ""
+  },
+  "000876": {
+    "industry": "C13农副食品加工业",
+    "industry_code": ""
+  },
+  "000895": {
+    "industry": "C13农副食品加工业",
+    "industry_code": ""
+  },
+  "000938": {
+    "industry": "C39计算机、通信和其他电子设备制造业",
+    "industry_code": ""
+  },
+  "000963": {
+    "industry": "F52零售业",
+    "industry_code": ""
+  },
+  "000975": {
+    "industry": "B09有色金属矿采选业",
+    "industry_code": ""
+  },
+  "000977": {
+    "industry": "C39计算机、通信和其他电子设备制造业",
+    "industry_code": ""
+  },
+  "000983": {
+    "industry": "B06煤炭开采和洗选业",
+    "industry_code": ""
+  },
+  "000999": {
+    "industry": "C27医药制造业",
+    "industry_code": ""
+  },
+  "001391": {
+    "industry": "G56航空运输业",
+    "industry_code": ""
+  },
+  "001965": {
+    "industry": "G54道路运输业",
+    "industry_code": ""
+  },
+  "001979": {
+    "industry": "K70房地产业",
+    "industry_code": ""
+  },
+  "002001": {
+    "industry": "C27医药制造业",
+    "industry_code": ""
+  },
+  "002027": {
+    "industry": "L72商务服务业",
+    "industry_code": ""
+  },
+  "002028": {
+    "industry": "C38电气机械和器材制造业",
+    "industry_code": ""
+  },
+  "002049": {
+    "industry": "C39计算机、通信和其他电子设备制造业",
+    "industry_code": ""
+  },
+  "002050": {
+    "industry": "C34通用设备制造业",
+    "industry_code": ""
+  },
+  "002074": {
+    "industry": "C38电气机械和器材制造业",
+    "industry_code": ""
+  },
+  "002142": {
+    "industry": "J66货币金融服务",
+    "industry_code": ""
+  },
+  "002179": {
+    "industry": "C39计算机、通信和其他电子设备制造业",
+    "industry_code": ""
+  },
+  "002230": {
+    "industry": "I65软件和信息技术服务业",
+    "industry_code": ""
+  },
+  "002236": {
+    "industry": "C39计算机、通信和其他电子设备制造业",
+    "industry_code": ""
+  },
+  "002241": {
+    "industry": "C39计算机、通信和其他电子设备制造业",
+    "industry_code": ""
+  },
+  "002252": {
+    "industry": "C27医药制造业",
+    "industry_code": ""
+  },
+  "002304": {
+    "industry": "C15酒、饮料和精制茶制造业",
+    "industry_code": ""
+  },
+  "002311": {
+    "industry": "C13农副食品加工业",
+    "industry_code": ""
+  },
+  "002352": {
+    "industry": "G60邮政业",
+    "industry_code": ""
+  },
+  "002371": {
+    "industry": "C35专用设备制造业",
+    "industry_code": ""
+  },
+  "002384": {
+    "industry": "C39计算机、通信和其他电子设备制造业",
+    "industry_code": ""
+  },
+  "002415": {
+    "industry": "C39计算机、通信和其他电子设备制造业",
+    "industry_code": ""
+  },
+  "002422": {
+    "industry": "C27医药制造业",
+    "industry_code": ""
+  },
+  "002459": {
+    "industry": "C38电气机械和器材制造业",
+    "industry_code": ""
+  },
+  "002460": {
+    "industry": "C32有色金属冶炼和压延加工业",
+    "industry_code": ""
+  },
+  "002463": {
+    "industry": "C39计算机、通信和其他电子设备制造业",
+    "industry_code": ""
+  },
+  "002466": {
+    "industry": "C32有色金属冶炼和压延加工业",
+    "industry_code": ""
+  },
+  "002475": {
+    "industry": "C39计算机、通信和其他电子设备制造业",
+    "industry_code": ""
+  },
+  "002493": {
+    "industry": "C26化学原料和化学制品制造业",
+    "industry_code": ""
+  },
+  "002594": {
+    "industry": "C36汽车制造业",
+    "industry_code": ""
+  },
+  "002600": {
+    "industry": "C39计算机、通信和其他电子设备制造业",
+    "industry_code": ""
+  },
+  "002601": {
+    "industry": "C26化学原料和化学制品制造业",
+    "industry_code": ""
+  },
+  "002625": {
+    "industry": "C37铁路、船舶、航空航天和其他运输设备制造业",
+    "industry_code": ""
+  },
+  "002648": {
+    "industry": "C26化学原料和化学制品制造业",
+    "industry_code": ""
+  },
+  "002709": {
+    "industry": "C39计算机、通信和其他电子设备制造业",
+    "industry_code": ""
+  },
+  "002714": {
+    "industry": "A03畜牧业",
+    "industry_code": ""
+  },
+  "002736": {
+    "industry": "J67资本市场服务",
+    "industry_code": ""
+  },
+  "002916": {
+    "industry": "C39计算机、通信和其他电子设备制造业",
+    "industry_code": ""
+  },
+  "002920": {
+    "industry": "C39计算机、通信和其他电子设备制造业",
+    "industry_code": ""
+  },
+  "002938": {
+    "industry": "C39计算机、通信和其他电子设备制造业",
+    "industry_code": ""
+  },
+  "003816": {
+    "industry": "D44电力、热力生产和供应业",
+    "industry_code": ""
+  },
+  "302132": {
+    "industry": "C39计算机、通信和其他电子设备制造业",
+    "industry_code": ""
+  },
+  "600000": {
+    "industry": "J66货币金融服务",
+    "industry_code": ""
+  },
+  "600009": {
+    "industry": "G56航空运输业",
+    "industry_code": ""
+  },
+  "600010": {
+    "industry": "C31黑色金属冶炼和压延加工业",
+    "industry_code": ""
+  },
+  "600011": {
+    "industry": "D44电力、热力生产和供应业",
+    "industry_code": ""
+  },
+  "600015": {
+    "industry": "J66货币金融服务",
+    "industry_code": ""
+  },
+  "600016": {
+    "industry": "J66货币金融服务",
+    "industry_code": ""
+  },
+  "600018": {
+    "industry": "G55水上运输业",
+    "industry_code": ""
+  },
+  "600019": {
+    "industry": "C31黑色金属冶炼和压延加工业",
+    "industry_code": ""
+  },
+  "600023": {
+    "industry": "D44电力、热力生产和供应业",
+    "industry_code": ""
+  },
+  "600025": {
+    "industry": "D44电力、热力生产和供应业",
+    "industry_code": ""
+  },
+  "600026": {
+    "industry": "G55水上运输业",
+    "industry_code": ""
+  },
+  "600027": {
+    "industry": "D44电力、热力生产和供应业",
+    "industry_code": ""
+  },
+  "600028": {
+    "industry": "B07石油和天然气开采业",
+    "industry_code": ""
+  },
+  "600029": {
+    "industry": "G56航空运输业",
+    "industry_code": ""
+  },
+  "600030": {
+    "industry": "J67资本市场服务",
+    "industry_code": ""
+  },
+  "600031": {
+    "industry": "C35专用设备制造业",
+    "industry_code": ""
+  },
+  "600036": {
+    "industry": "J66货币金融服务",
+    "industry_code": ""
+  },
+  "600039": {
+    "industry": "E48土木工程建筑业",
+    "industry_code": ""
+  },
+  "600048": {
+    "industry": "K70房地产业",
+    "industry_code": ""
+  },
+  "600050": {
+    "industry": "I63电信、广播电视和卫星传输服务",
+    "industry_code": ""
+  },
+  "600061": {
+    "industry": "J67资本市场服务",
+    "industry_code": ""
+  },
+  "600066": {
+    "industry": "C36汽车制造业",
+    "industry_code": ""
+  },
+  "600085": {
+    "industry": "C27医药制造业",
+    "industry_code": ""
+  },
+  "600089": {
+    "industry": "C38电气机械和器材制造业",
+    "industry_code": ""
+  },
+  "600104": {
+    "industry": "C36汽车制造业",
+    "industry_code": ""
+  },
+  "600111": {
+    "industry": "C32有色金属冶炼和压延加工业",
+    "industry_code": ""
+  },
+  "600115": {
+    "industry": "G56航空运输业",
+    "industry_code": ""
+  },
+  "600150": {
+    "industry": "C37铁路、船舶、航空航天和其他运输设备制造业",
+    "industry_code": ""
+  },
+  "600160": {
+    "industry": "C26化学原料和化学制品制造业",
+    "industry_code": ""
+  },
+  "600161": {
+    "industry": "C27医药制造业",
+    "industry_code": ""
+  },
+  "600176": {
+    "industry": "C30非金属矿物制品业",
+    "industry_code": ""
+  },
+  "600183": {
+    "industry": "C39计算机、通信和其他电子设备制造业",
+    "industry_code": ""
+  },
+  "600188": {
+    "industry": "B06煤炭开采和洗选业",
+    "industry_code": ""
+  },
+  "600196": {
+    "industry": "C27医药制造业",
+    "industry_code": ""
+  },
+  "600219": {
+    "industry": "C32有色金属冶炼和压延加工业",
+    "industry_code": ""
+  },
+  "600233": {
+    "industry": "G60邮政业",
+    "industry_code": ""
+  },
+  "600276": {
+    "industry": "C27医药制造业",
+    "industry_code": ""
+  },
+  "600309": {
+    "industry": "C26化学原料和化学制品制造业",
+    "industry_code": ""
+  },
+  "600346": {
+    "industry": "C26化学原料和化学制品制造业",
+    "industry_code": ""
+  },
+  "600362": {
+    "industry": "C32有色金属冶炼和压延加工业",
+    "industry_code": ""
+  },
+  "600372": {
+    "industry": "C37铁路、船舶、航空航天和其他运输设备制造业",
+    "industry_code": ""
+  },
+  "600377": {
+    "industry": "G54道路运输业",
+    "industry_code": ""
+  },
+  "600406": {
+    "industry": "I65软件和信息技术服务业",
+    "industry_code": ""
+  },
+  "600415": {
+    "industry": "L72商务服务业",
+    "industry_code": ""
+  },
+  "600426": {
+    "industry": "C26化学原料和化学制品制造业",
+    "industry_code": ""
+  },
+  "600436": {
+    "industry": "C27医药制造业",
+    "industry_code": ""
+  },
+  "600438": {
+    "industry": "C38电气机械和器材制造业",
+    "industry_code": ""
+  },
+  "600460": {
+    "industry": "C39计算机、通信和其他电子设备制造业",
+    "industry_code": ""
+  },
+  "600482": {
+    "industry": "C37铁路、船舶、航空航天和其他运输设备制造业",
+    "industry_code": ""
+  },
+  "600489": {
+    "industry": "B09有色金属矿采选业",
+    "industry_code": ""
+  },
+  "600515": {
+    "industry": "K70房地产业",
+    "industry_code": ""
+  },
+  "600519": {
+    "industry": "C15酒、饮料和精制茶制造业",
+    "industry_code": ""
+  },
+  "600522": {
+    "industry": "C38电气机械和器材制造业",
+    "industry_code": ""
+  },
+  "600547": {
+    "industry": "B09有色金属矿采选业",
+    "industry_code": ""
+  },
+  "600570": {
+    "industry": "I65软件和信息技术服务业",
+    "industry_code": ""
+  },
+  "600584": {
+    "industry": "C39计算机、通信和其他电子设备制造业",
+    "industry_code": ""
+  },
+  "600585": {
+    "industry": "C30非金属矿物制品业",
+    "industry_code": ""
+  },
+  "600588": {
+    "industry": "I65软件和信息技术服务业",
+    "industry_code": ""
+  },
+  "600600": {
+    "industry": "C15酒、饮料和精制茶制造业",
+    "industry_code": ""
+  },
+  "600660": {
+    "industry": "C30非金属矿物制品业",
+    "industry_code": ""
+  },
+  "600674": {
+    "industry": "D44电力、热力生产和供应业",
+    "industry_code": ""
+  },
+  "600690": {
+    "industry": "C38电气机械和器材制造业",
+    "industry_code": ""
+  },
+  "600741": {
+    "industry": "C36汽车制造业",
+    "industry_code": ""
+  },
+  "600760": {
+    "industry": "C37铁路、船舶、航空航天和其他运输设备制造业",
+    "industry_code": ""
+  },
+  "600795": {
+    "industry": "D44电力、热力生产和供应业",
+    "industry_code": ""
+  },
+  "600803": {
+    "industry": "D45燃气生产和供应业",
+    "industry_code": ""
+  },
+  "600809": {
+    "industry": "C15酒、饮料和精制茶制造业",
+    "industry_code": ""
+  },
+  "600845": {
+    "industry": "I65软件和信息技术服务业",
+    "industry_code": ""
+  },
+  "600875": {
+    "industry": "C34通用设备制造业",
+    "industry_code": ""
+  },
+  "600886": {
+    "industry": "D44电力、热力生产和供应业",
+    "industry_code": ""
+  },
+  "600887": {
+    "industry": "C14食品制造业",
+    "industry_code": ""
+  },
+  "600893": {
+    "industry": "C37铁路、船舶、航空航天和其他运输设备制造业",
+    "industry_code": ""
+  },
+  "600900": {
+    "industry": "D44电力、热力生产和供应业",
+    "industry_code": ""
+  },
+  "600905": {
+    "industry": "D44电力、热力生产和供应业",
+    "industry_code": ""
+  },
+  "600918": {
+    "industry": "J67资本市场服务",
+    "industry_code": ""
+  },
+  "600919": {
+    "industry": "J66货币金融服务",
+    "industry_code": ""
+  },
+  "600926": {
+    "industry": "J66货币金融服务",
+    "industry_code": ""
+  },
+  "600930": {
+    "industry": "D44电力、热力生产和供应业",
+    "industry_code": ""
+  },
+  "600938": {
+    "industry": "B07石油和天然气开采业",
+    "industry_code": ""
+  },
+  "600941": {
+    "industry": "I63电信、广播电视和卫星传输服务",
+    "industry_code": ""
+  },
+  "600958": {
+    "industry": "J67资本市场服务",
+    "industry_code": ""
+  },
+  "600989": {
+    "industry": "C26化学原料和化学制品制造业",
+    "industry_code": ""
+  },
+  "600999": {
+    "industry": "J67资本市场服务",
+    "industry_code": ""
+  },
+  "601006": {
+    "industry": "G53铁路运输业",
+    "industry_code": ""
+  },
+  "601009": {
+    "industry": "J66货币金融服务",
+    "industry_code": ""
+  },
+  "601012": {
+    "industry": "C38电气机械和器材制造业",
+    "industry_code": ""
+  },
+  "601018": {
+    "industry": "G55水上运输业",
+    "industry_code": ""
+  },
+  "601021": {
+    "industry": "G56航空运输业",
+    "industry_code": ""
+  },
+  "601058": {
+    "industry": "C29橡胶和塑料制品业",
+    "industry_code": ""
+  },
+  "601059": {
+    "industry": "J67资本市场服务",
+    "industry_code": ""
+  },
+  "601066": {
+    "industry": "J67资本市场服务",
+    "industry_code": ""
+  },
+  "601077": {
+    "industry": "J66货币金融服务",
+    "industry_code": ""
+  },
+  "601088": {
+    "industry": "B06煤炭开采和洗选业",
+    "industry_code": ""
+  },
+  "601100": {
+    "industry": "C34通用设备制造业",
+    "industry_code": ""
+  },
+  "601111": {
+    "industry": "G56航空运输业",
+    "industry_code": ""
+  },
+  "601117": {
+    "industry": "E48土木工程建筑业",
+    "industry_code": ""
+  },
+  "601127": {
+    "industry": "C36汽车制造业",
+    "industry_code": ""
+  },
+  "601136": {
+    "industry": "J67资本市场服务",
+    "industry_code": ""
+  },
+  "601138": {
+    "industry": "C39计算机、通信和其他电子设备制造业",
+    "industry_code": ""
+  },
+  "601166": {
+    "industry": "J66货币金融服务",
+    "industry_code": ""
+  },
+  "601169": {
+    "industry": "J66货币金融服务",
+    "industry_code": ""
+  },
+  "601186": {
+    "industry": "E48土木工程建筑业",
+    "industry_code": ""
+  },
+  "601211": {
+    "industry": "J67资本市场服务",
+    "industry_code": ""
+  },
+  "601225": {
+    "industry": "B06煤炭开采和洗选业",
+    "industry_code": ""
+  },
+  "601229": {
+    "industry": "J66货币金融服务",
+    "industry_code": ""
+  },
+  "601236": {
+    "industry": "J67资本市场服务",
+    "industry_code": ""
+  },
+  "601238": {
+    "industry": "C36汽车制造业",
+    "industry_code": ""
+  },
+  "601288": {
+    "industry": "J66货币金融服务",
+    "industry_code": ""
+  },
+  "601298": {
+    "industry": "G55水上运输业",
+    "industry_code": ""
+  },
+  "601318": {
+    "industry": "J68保险业",
+    "industry_code": ""
+  },
+  "601319": {
+    "industry": "J68保险业",
+    "industry_code": ""
+  },
+  "601328": {
+    "industry": "J66货币金融服务",
+    "industry_code": ""
+  },
+  "601336": {
+    "industry": "J68保险业",
+    "industry_code": ""
+  },
+  "601360": {
+    "industry": "I64互联网和相关服务",
+    "industry_code": ""
+  },
+  "601377": {
+    "industry": "J67资本市场服务",
+    "industry_code": ""
+  },
+  "601390": {
+    "industry": "E48土木工程建筑业",
+    "industry_code": ""
+  },
+  "601398": {
+    "industry": "J66货币金融服务",
+    "industry_code": ""
+  },
+  "601456": {
+    "industry": "J67资本市场服务",
+    "industry_code": ""
+  },
+  "601600": {
+    "industry": "C32有色金属冶炼和压延加工业",
+    "industry_code": ""
+  },
+  "601601": {
+    "industry": "J68保险业",
+    "industry_code": ""
+  },
+  "601607": {
+    "industry": "F52零售业",
+    "industry_code": ""
+  },
+  "601618": {
+    "industry": "E48土木工程建筑业",
+    "industry_code": ""
+  },
+  "601628": {
+    "industry": "J68保险业",
+    "industry_code": ""
+  },
+  "601633": {
+    "industry": "C36汽车制造业",
+    "industry_code": ""
+  },
+  "601658": {
+    "industry": "J66货币金融服务",
+    "industry_code": ""
+  },
+  "601668": {
+    "industry": "E48土木工程建筑业",
+    "industry_code": ""
+  },
+  "601669": {
+    "industry": "E48土木工程建筑业",
+    "industry_code": ""
+  },
+  "601688": {
+    "industry": "J67资本市场服务",
+    "industry_code": ""
+  },
+  "601689": {
+    "industry": "C36汽车制造业",
+    "industry_code": ""
+  },
+  "601698": {
+    "industry": "I63电信、广播电视和卫星传输服务",
+    "industry_code": ""
+  },
+  "601728": {
+    "industry": "I63电信、广播电视和卫星传输服务",
+    "industry_code": ""
+  },
+  "601766": {
+    "industry": "C37铁路、船舶、航空航天和其他运输设备制造业",
+    "industry_code": ""
+  },
+  "601788": {
+    "industry": "J67资本市场服务",
+    "industry_code": ""
+  },
+  "601800": {
+    "industry": "E48土木工程建筑业",
+    "industry_code": ""
+  },
+  "601808": {
+    "industry": "B11开采专业及辅助性活动",
+    "industry_code": ""
+  },
+  "601816": {
+    "industry": "G53铁路运输业",
+    "industry_code": ""
+  },
+  "601818": {
+    "industry": "J66货币金融服务",
+    "industry_code": ""
+  },
+  "601825": {
+    "industry": "J66货币金融服务",
+    "industry_code": ""
+  },
+  "601838": {
+    "industry": "J66货币金融服务",
+    "industry_code": ""
+  },
+  "601857": {
+    "industry": "B07石油和天然气开采业",
+    "industry_code": ""
+  },
+  "601868": {
+    "industry": "E48土木工程建筑业",
+    "industry_code": ""
+  },
+  "601872": {
+    "industry": "G55水上运输业",
+    "industry_code": ""
+  },
+  "601877": {
+    "industry": "C38电气机械和器材制造业",
+    "industry_code": ""
+  },
+  "601878": {
+    "industry": "J67资本市场服务",
+    "industry_code": ""
+  },
+  "601881": {
+    "industry": "J67资本市场服务",
+    "industry_code": ""
+  },
+  "601888": {
+    "industry": "L72商务服务业",
+    "industry_code": ""
+  },
+  "601898": {
+    "industry": "B06煤炭开采和洗选业",
+    "industry_code": ""
+  },
+  "601899": {
+    "industry": "B09有色金属矿采选业",
+    "industry_code": ""
+  },
+  "601901": {
+    "industry": "J67资本市场服务",
+    "industry_code": ""
+  },
+  "601916": {
+    "industry": "J66货币金融服务",
+    "industry_code": ""
+  },
+  "601919": {
+    "industry": "G55水上运输业",
+    "industry_code": ""
+  },
+  "601939": {
+    "industry": "J66货币金融服务",
+    "industry_code": ""
+  },
+  "601985": {
+    "industry": "D44电力、热力生产和供应业",
+    "industry_code": ""
+  },
+  "601988": {
+    "industry": "J66货币金融服务",
+    "industry_code": ""
+  },
+  "601995": {
+    "industry": "J67资本市场服务",
+    "industry_code": ""
+  },
+  "601998": {
+    "industry": "J66货币金融服务",
+    "industry_code": ""
+  },
+  "603019": {
+    "industry": "C39计算机、通信和其他电子设备制造业",
+    "industry_code": ""
+  },
+  "603195": {
+    "industry": "C38电气机械和器材制造业",
+    "industry_code": ""
+  },
+  "603259": {
+    "industry": "M73研究和试验发展",
+    "industry_code": ""
+  },
+  "603260": {
+    "industry": "C26化学原料和化学制品制造业",
+    "industry_code": ""
+  },
+  "603288": {
+    "industry": "C14食品制造业",
+    "industry_code": ""
+  },
+  "603296": {
+    "industry": "C39计算机、通信和其他电子设备制造业",
+    "industry_code": ""
+  },
+  "603369": {
+    "industry": "C15酒、饮料和精制茶制造业",
+    "industry_code": ""
+  },
+  "603392": {
+    "industry": "C27医药制造业",
+    "industry_code": ""
+  },
+  "603501": {
+    "industry": "C39计算机、通信和其他电子设备制造业",
+    "industry_code": ""
+  },
+  "603799": {
+    "industry": "C32有色金属冶炼和压延加工业",
+    "industry_code": ""
+  },
+  "603893": {
+    "industry": "C39计算机、通信和其他电子设备制造业",
+    "industry_code": ""
+  },
+  "603986": {
+    "industry": "C39计算机、通信和其他电子设备制造业",
+    "industry_code": ""
+  },
+  "603993": {
+    "industry": "B09有色金属矿采选业",
+    "industry_code": ""
+  },
+  "605117": {
+    "industry": "C38电气机械和器材制造业",
+    "industry_code": ""
+  },
+  "605499": {
+    "industry": "C15酒、饮料和精制茶制造业",
+    "industry_code": ""
+  }
+}

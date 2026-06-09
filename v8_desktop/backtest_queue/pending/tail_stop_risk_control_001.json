@@ -1,0 +1,159 @@
+{
+  "id": "tail_stop_risk_control_001",
+  "created_at": "2026-06-09T02:35:00+08:00",
+  "created_by": "codex",
+  "project_root": "C:\\Users\\56440\\v8_desktop",
+  "priority": "high",
+  "purpose": "在真实90/120交易日长窗口中，验证尾盘高弹性趋势执行层的止损/风控机制。上一轮已证明数据覆盖修复后 baseline 仍有 edge，但回撤扩大到 -24%~-28%，当前瓶颈是风险控制，不是继续因子过滤。",
+  "background": {
+    "previous_task": "tail_execution_data_coverage_001",
+    "previous_result_files": [
+      "C:\\Users\\56440\\v8_desktop\\backtest_queue\\done\\tail_execution_data_coverage_001_result.json",
+      "C:\\Users\\56440\\v8_desktop\\reports\\tail_execution_data_coverage_summary_20260609.md",
+      "C:\\Users\\56440\\v8_desktop\\STRATEGY_WORKLOG.md"
+    ],
+    "data_coverage_fixed": {
+      "effective_trading_days": 120,
+      "date_range": "2025-11-21 ~ 2026-05-25",
+      "kline_count": 600,
+      "rows_after_execution_attach": 7190,
+      "dropped_rows": 0
+    },
+    "current_baseline": {
+      "rule": "elastic_base + dec_E + max_positions=2",
+      "pp20_90d": {
+        "total_return": 15.90,
+        "max_drawdown": -24.30,
+        "return_to_drawdown": 0.65,
+        "win_rate": 45.2,
+        "profit_factor": 1.606,
+        "trade_count": 104
+      },
+      "pp20_120d": {
+        "total_return": 23.01,
+        "max_drawdown": -28.46,
+        "return_to_drawdown": 0.81,
+        "win_rate": 46.4,
+        "profit_factor": 1.639,
+        "trade_count": 140
+      }
+    },
+    "latest_decisions": [
+      "base_no_range_gt8 已在真实长窗口中 reject，不接入主流程。",
+      "不要继续调个股振幅过滤或新增因子过滤。",
+      "当前策略仍有 alpha，但回撤过大，下一步必须测试止损/风控机制。"
+    ]
+  },
+  "requested_work": [
+    {
+      "step": 1,
+      "description": "先读取 STRATEGY_WORKLOG.md、tail_execution_data_coverage_001_result.json、run_tail_execution_data_coverage.py、run_tail_portfolio_backtest.py、run_tail_entry_backtest.py。不要重新做数据覆盖修复，不要重新做因子过滤，本轮只测止损/风控。"
+    },
+    {
+      "step": 2,
+      "description": "新增独立脚本，建议命名 run_tail_stop_risk_control.py。复用上一轮已修复的数据覆盖逻辑：kline_count=600，窗口90/120交易日，CSI300前60只，执行价字段完整。不要修改主策略文件，除非必须。"
+    },
+    {
+      "step": 3,
+      "description": "固定选股因子和基础执行框架：factor=elastic_base，max_positions=2，position_pct 测 0.15 和 0.20。baseline 为原 dec_E，不加额外风控。"
+    },
+    {
+      "step": 4,
+      "description": "测试单笔止损规则。建议至少包括：A. 原 dec_E；B. T+1 14:00 收益 <= -1% 卖，否则按原 dec_E；C. <= -1.5%；D. <= -2%；E. <= -3%；F. 跌破 T 日低点卖；G. 跌破 T 日低点或收益<=-2%卖；H. T+1 open 已经亏损超过阈值则直接卖。注意所有规则只能用 T+1 当时或之前可见数据。"
+    },
+    {
+      "step": 5,
+      "description": "测试 ATR/波动自适应止损。建议：按 entry_price - k * ATR_price 或收益 <= -x * atr_pct 的方式近似，至少测 k=0.5/0.8/1.0；如果现有数据没有 ATR_price，就用 atr_pct * entry_price 近似，并在报告中说明。"
+    },
+    {
+      "step": 6,
+      "description": "测试时间止损/持有缩短。比较：原 dec_E 的强势持有到 T+2；强势票只持有到 T+1 close；T+2 仅在 T+1 close 为正且未破 T 日低点时持有；T+1 close 若未盈利则退出。"
+    },
+    {
+      "step": 7,
+      "description": "测试组合级风控。建议至少包括：连续亏损2/3笔后暂停开仓N天（N=2/3/5）；组合权益从近期高点回撤超过5%/8%后暂停开仓3/5天；当天已有一笔止损后是否暂停新开仓。注意不要用未来函数。"
+    },
+    {
+      "step": 8,
+      "description": "输出 top 10 风控规则，排序不能只看收益。请按综合标准排序：max_drawdown 优先压到 -12%~-18%，同时 total_return 仍为正且最好 >=8%，PF >1.4，trade_count 不低于 baseline 60%，win_rate 不恶化太多。"
+    },
+    {
+      "step": 9,
+      "description": "追踪 worst trades。列出 baseline 的 worst 10 trades，以及最佳风控规则是否真正截断了这些亏损，还是只是牺牲了主要盈利交易。"
+    },
+    {
+      "step": 10,
+      "description": "明确建议下一步：如果找到可接受风控规则，是否接入每日扫描/执行建议；如果没有，说明当前尾盘执行层只可观察，不适合实盘。不要强行推荐。"
+    }
+  ],
+  "recommended_matrix": {
+    "windows_trading_days": [90, 120],
+    "factor": "elastic_base",
+    "base_exit_rule": "dec_E",
+    "max_positions": [2],
+    "position_pct": [0.15, 0.20],
+    "risk_rule_groups": [
+      "single_trade_pct_stop",
+      "t_day_low_break_stop",
+      "atr_adaptive_stop",
+      "shorter_holding_time",
+      "portfolio_drawdown_kill_switch",
+      "loss_streak_pause"
+    ],
+    "splits": ["full", "first_half", "second_half"]
+  },
+  "must_output": {
+    "raw_report_json": "C:\\Users\\56440\\v8_desktop\\reports\\tail_stop_risk_control_<timestamp>.json",
+    "summary_markdown": "C:\\Users\\56440\\v8_desktop\\reports\\tail_stop_risk_control_summary_<timestamp>.md",
+    "queue_result_json": "C:\\Users\\56440\\v8_desktop\\backtest_queue\\done\\tail_stop_risk_control_001_result.json"
+  },
+  "metrics_required": [
+    "rule_name",
+    "rule_group",
+    "window_days",
+    "actual_date_range",
+    "position_pct",
+    "split",
+    "total_return",
+    "max_drawdown",
+    "return_to_drawdown",
+    "trade_count",
+    "trade_count_ratio_vs_baseline",
+    "win_rate",
+    "avg_trade_return",
+    "median_trade_return",
+    "profit_factor",
+    "longest_loss_streak",
+    "worst_trade",
+    "best_trade",
+    "avg_cash_usage",
+    "max_concurrent_positions",
+    "stopped_trade_count",
+    "avoided_baseline_worst_count",
+    "missed_big_winner_count",
+    "worst_10_trades",
+    "top_10_trades"
+  ],
+  "questions_for_cc": [
+    "哪类风控最有效降低最大回撤：单笔止损、T日低点破位、ATR自适应、缩短持有、组合kill-switch，还是连续亏损暂停？",
+    "是否有规则能把120天 pp20 最大回撤从 -28.46% 压到 -18%以内，同时保留至少 +8% 收益和 PF>1.4？",
+    "如果 pp20 很难控制回撤，pp15 加风控是否明显更适合实盘观察？",
+    "最佳规则是否真正截断了 baseline 的 worst trades？有没有错杀主要大盈利交易？",
+    "胜率从45%-46%是否能改善，还是只能通过盈亏比/回撤控制改善？",
+    "是否建议将某条风控规则接入每日扫描/执行建议？如果建议，接入方式是什么？如果不建议，请明确说不适合实盘。"
+  ],
+  "constraints": [
+    "不要使用未来函数。T日选股只能用T日尾盘可见数据；T+1 14:00规则只能使用T+1 14:00前可见数据；T+1 close/T+2 close只能作为退出点。",
+    "不要新增或继续优化因子过滤，本轮不是因子搜索。",
+    "不要重新拉Tushare财务数据。",
+    "不要把降低仓位本身当成唯一风控答案；pp15可以作为对照，但重点要测试规则是否改善风险收益。",
+    "不要只报告最漂亮收益，必须报告回撤、PF、worst_trade、错杀大盈利、交易数。",
+    "如果规则导致 trade_count 过低或收益来自少数极端交易，必须降级说明。",
+    "输出必须写入 reports 和 backtest_queue/done 固定路径。"
+  ],
+  "done_when": [
+    "backtest_queue\\done\\tail_stop_risk_control_001_result.json 存在",
+    "reports 下存在完整 JSON 和 Markdown 摘要",
+    "摘要明确回答：是否找到可实盘观察的风控规则、推荐 pp15 还是 pp20、是否接入每日扫描/执行建议、下一轮该做什么"
+  ]
+}

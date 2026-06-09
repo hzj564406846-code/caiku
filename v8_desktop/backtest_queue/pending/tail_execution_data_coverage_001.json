@@ -1,0 +1,134 @@
+{
+  "id": "tail_execution_data_coverage_001",
+  "created_at": "2026-06-09T02:05:00+08:00",
+  "created_by": "codex",
+  "project_root": "C:\\Users\\56440\\v8_desktop",
+  "priority": "high",
+  "purpose": "修复/扩展尾盘执行层回测的历史K线与执行价格覆盖，使90/120交易日验证真正可用。上一轮 tail_range_filter_long_window_001 因K线缓存只覆盖2026-04-07之后，实际仅验证32个交易日，不能作为长窗口结论。",
+  "background": {
+    "previous_tasks": [
+      "tail_1400_decision_001",
+      "tail_position_sizing_001",
+      "tail_market_filter_001",
+      "tail_factor_risk_search_001",
+      "tail_range_filter_long_window_001"
+    ],
+    "previous_result_files": [
+      "C:\\Users\\56440\\v8_desktop\\backtest_queue\\done\\tail_range_filter_long_window_001_result.json",
+      "C:\\Users\\56440\\v8_desktop\\reports\\tail_range_filter_long_window_summary_20260609.md",
+      "C:\\Users\\56440\\v8_desktop\\STRATEGY_WORKLOG.md"
+    ],
+    "latest_decision": "base_no_range_gt8 不满足硬过滤门槛，只能作为观察标签；但这个判断仍建立在32个交易日短窗口上。真正下一步不是继续调参，而是先修复数据覆盖后重跑90/120交易日验证。",
+    "known_issue": {
+      "planned_windows": [90, 120],
+      "actual_trading_days": 32,
+      "actual_date_range": "2026-04-07 ~ 2026-05-25",
+      "reason": "K线缓存数据仅覆盖2026-04-07之后，attach_execution_prices 阶段因缺少 entry_close/t1_open/t1_close/t2_close 等执行价丢弃更早样本。"
+    },
+    "baseline_to_retest": {
+      "factor": "elastic_base = ATR% + ret_20d + ma20_gap",
+      "variant": "base_no_range_gt8 = exclude T-day intraday_range_pct > 8%",
+      "execution": "dec_E + max_positions=2",
+      "position_pct": [0.15, 0.20]
+    }
+  },
+  "requested_work": [
+    {
+      "step": 1,
+      "description": "先读取 STRATEGY_WORKLOG.md、tail_range_filter_long_window_001_result.json、run_tail_range_filter_long_window.py、run_tail_factor_risk_search.py、run_tail_portfolio_backtest.py、run_tail_entry_backtest.py。不要重新设计策略方向，本轮只解决数据覆盖与真实长窗口验证。"
+    },
+    {
+      "step": 2,
+      "description": "定位为什么90/120天窗口只剩32个有效交易日。请具体检查 build_factor_table、fetch_klines、attach_execution_prices、kline_count、缓存路径和丢弃逻辑，输出每个阶段的样本数：原始因子行数、执行价附加前行数、附加后有效行数、因缺哪个字段被丢弃的行数。"
+    },
+    {
+      "step": 3,
+      "description": "修复或新增一个独立脚本，建议命名 run_tail_execution_data_coverage.py。目标是显式拉取/缓存足够长的日K数据，使 entry_close、t1_open、t1_close、t2_close、t_high、t_low、intraday_range_pct、t1_1400_approx 等执行所需字段覆盖至少90/120个有效交易日。优先复用现有 fetch_klines 和 attach_execution_prices 逻辑，不要污染主流程。"
+    },
+    {
+      "step": 4,
+      "description": "如果免费数据源无法稳定拿到更早数据，要明确说明限制，并给出可执行替代方案：增大 kline_count、清理/重建缓存、改用已有本地缓存、BaoStock日线补齐、或标记需要后续数据源支持。不要把数据不足解释为策略失败。"
+    },
+    {
+      "step": 5,
+      "description": "数据覆盖修复后，重跑真正90/120交易日验证。只比较两个规则：baseline=elastic_base 与 range_filter=base_no_range_gt8。不要新增更多过滤规则，不要继续调参。"
+    },
+    {
+      "step": 6,
+      "description": "固定执行框架：dec_E + max_positions=2；position_pct 测 0.15 和 0.20。输出 full、first_half、second_half；如果有效交易日足够，再输出 rolling_20d。"
+    },
+    {
+      "step": 7,
+      "description": "必须追踪 worst trades：列出 baseline 和 range_filter 的 worst 10 trades，判断 range_filter 是稳定过滤掉最差交易，还是只是换了一批亏损。"
+    },
+    {
+      "step": 8,
+      "description": "输出最终判断：base_no_range_gt8 是否应作为 hard_filter、downgrade_label、observation_label，还是 reject。判断标准至少包括 r/dd 是否稳定不低于 baseline、worst_trade 是否稳定改善、longest_loss_streak 是否不恶化、max_drawdown 是否不明显恶化、trade_count 是否不低于 baseline 的80%。"
+    }
+  ],
+  "recommended_matrix": {
+    "windows_trading_days": [90, 120],
+    "rules": ["elastic_base", "base_no_range_gt8"],
+    "exit_rule": "dec_E",
+    "max_positions": [2],
+    "position_pct": [0.15, 0.20],
+    "splits": ["full", "first_half", "second_half", "rolling_20d_if_possible"]
+  },
+  "must_output": {
+    "raw_report_json": "C:\\Users\\56440\\v8_desktop\\reports\\tail_execution_data_coverage_<timestamp>.json",
+    "summary_markdown": "C:\\Users\\56440\\v8_desktop\\reports\\tail_execution_data_coverage_summary_<timestamp>.md",
+    "queue_result_json": "C:\\Users\\56440\\v8_desktop\\backtest_queue\\done\\tail_execution_data_coverage_001_result.json"
+  },
+  "metrics_required": [
+    "planned_window_days",
+    "actual_date_range",
+    "effective_trading_days",
+    "raw_factor_rows",
+    "rows_before_execution_price_attach",
+    "rows_after_execution_price_attach",
+    "dropped_rows_by_missing_field",
+    "valid_signal_count",
+    "valid_trade_count",
+    "rule_name",
+    "position_pct",
+    "split",
+    "total_return",
+    "max_drawdown",
+    "return_to_drawdown",
+    "trade_count",
+    "trade_count_ratio_vs_baseline",
+    "win_rate",
+    "avg_trade_return",
+    "median_trade_return",
+    "profit_factor",
+    "longest_loss_streak",
+    "worst_trade",
+    "best_trade",
+    "worst_10_trades",
+    "filtered_baseline_worst_count",
+    "avg_cash_usage",
+    "max_concurrent_positions"
+  ],
+  "questions_for_cc": [
+    "90/120天窗口之前为什么只剩32个有效交易日？根因是kline_count不够、缓存截断、fetch_klines逻辑、还是attach_execution_prices丢弃规则？",
+    "本轮修复后，实际有效交易日是否达到90/120？如果没有，卡在哪里？",
+    "在真实90/120交易日里，baseline elastic_base 是否仍然有正edge？",
+    "base_no_range_gt8 是否稳定提升 return_to_drawdown？是否稳定改善 worst_trade 和 longest_loss_streak？",
+    "base_no_range_gt8 是否导致 max_drawdown 恶化？恶化是否可接受？",
+    "最终建议它接入每日扫描时应该是硬过滤、降级标签、观察标签，还是不接入？",
+    "如果数据源仍不足，下一步最省成本的数据补齐方案是什么？"
+  ],
+  "constraints": [
+    "不要使用未来函数。T日尾盘开仓只能使用T日收盘前或尾盘可见数据；T+1/T+2只用于退出。",
+    "不要新增策略规则或继续调参，本轮只修复数据覆盖并重测 baseline vs base_no_range_gt8。",
+    "不要大规模拉取Tushare财务数据，基本面不是本轮重点。",
+    "不要把数据源失败、缓存缺失、休市误判为策略失败。",
+    "如果修改代码，优先新增独立脚本；必要的小范围修复要列明文件和函数。",
+    "输出必须写入 reports 和 backtest_queue/done 的固定路径，不要只口头汇报。"
+  ],
+  "done_when": [
+    "backtest_queue\\done\\tail_execution_data_coverage_001_result.json 存在",
+    "reports 下存在完整 JSON 和 Markdown 摘要",
+    "摘要明确回答：数据覆盖是否修复、实际有效窗口是多少、baseline是否仍有edge、base_no_range_gt8是否能接入每日扫描以及接入方式"
+  ]
+}

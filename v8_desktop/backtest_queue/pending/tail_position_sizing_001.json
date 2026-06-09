@@ -1,0 +1,101 @@
+{
+  "id": "tail_position_sizing_001",
+  "created_at": "2026-06-08T17:20:00+08:00",
+  "created_by": "codex",
+  "project_root": "C:\\Users\\56440\\v8_desktop",
+  "priority": "high",
+  "purpose": "验证尾盘买入短线策略在真实账户约束下是否仍然有效。重点修正上一轮 T+2/dec_E 因持仓重叠导致的收益高估。",
+  "background": {
+    "previous_task": "tail_1400_decision_001",
+    "previous_result_files": [
+      "C:\\Users\\56440\\v8_desktop\\backtest_queue\\done\\tail_1400_decision_001_result.json",
+      "C:\\Users\\56440\\v8_desktop\\reports\\tail_1400_decision_summary_20260608.md",
+      "C:\\Users\\56440\\v8_desktop\\reports\\tail_1400_decision_minute_20260608.json"
+    ],
+    "key_findings": [
+      "固定14:00卖出弱于条件决策。",
+      "dec_C（14:00跌破T日低点卖，否则T+1收盘）相对稳健，主要改善回撤。",
+      "dec_E（14:00收益<=-2%或跌破T日低点卖，否则持有到T+2）收益最高，但持仓重叠/资金占用高估严重。",
+      "下一轮不应继续优化14:00阈值，应先做真实账户持仓上限和资金占用模拟。"
+    ],
+    "strategy_frame": "盘前选池 -> T日尾盘买入 -> T+1 14:00 去留判断 -> 弱则卖，强则收盘/T+2。"
+  },
+  "requested_work": [
+    {
+      "step": 1,
+      "description": "先读取上一轮结果文件和 run_tail_entry_backtest.py。不要重做方向判断；本轮只解决真实账户约束问题。"
+    },
+    {
+      "step": 2,
+      "description": "新增一个资金占用/持仓上限模拟脚本，建议命名为 run_tail_portfolio_backtest.py；也可以小范围扩展 run_tail_entry_backtest.py，但推荐独立脚本，避免污染研究脚本。"
+    },
+    {
+      "step": 3,
+      "description": "输入使用上一轮真实分钟线样本或重新生成相同样本：days=45, top=60, select=5, minute_exit_time=14:00。至少覆盖 elastic_base；如时间允许再覆盖 elastic_d3。"
+    },
+    {
+      "step": 4,
+      "description": "模拟真实账户约束：初始资金100000；最多同时持仓 max_positions=2/3/5；单票仓位 position_pct=10%/15%/20%；有持仓未退出时，新信号按排名依次填满空位，不能无限叠仓。"
+    },
+    {
+      "step": 5,
+      "description": "至少比较四种退出规则：t1_close、t2_close、dec_C、dec_E。dec_C=14:00跌破T日低点卖，否则T+1收盘；dec_E=14:00收益<=-2%或跌破T日低点卖，否则T+2收盘。"
+    },
+    {
+      "step": 6,
+      "description": "输出真实账户曲线指标：total_return、annualized或区间收益、max_drawdown、win_rate、avg_trade_return、profit_factor、trade_count、exposure_days、avg_cash_usage、max_concurrent_positions、连续亏损次数、单笔最大亏损。"
+    },
+    {
+      "step": 7,
+      "description": "重点回答：在 max_positions=2/3/5 和 position_pct=10%/15%/20% 下，dec_E 是否仍优于 dec_C？如果 dec_E 只是在无限叠仓曲线里好看，请明确指出。"
+    }
+  ],
+  "recommended_matrix": {
+    "factor_specs": ["elastic_base"],
+    "exit_rules": ["t1_close", "t2_close", "dec_C", "dec_E"],
+    "max_positions": [2, 3, 5],
+    "position_pct": [0.1, 0.15, 0.2],
+    "initial_cash": 100000
+  },
+  "must_output": {
+    "raw_report_json": "C:\\Users\\56440\\v8_desktop\\reports\\tail_portfolio_backtest_<timestamp>.json",
+    "summary_markdown": "C:\\Users\\56440\\v8_desktop\\reports\\tail_portfolio_backtest_summary_<timestamp>.md",
+    "queue_result_json": "C:\\Users\\56440\\v8_desktop\\backtest_queue\\done\\tail_position_sizing_001_result.json"
+  },
+  "metrics_required": [
+    "total_return",
+    "max_drawdown",
+    "trade_count",
+    "win_rate",
+    "avg_trade_return",
+    "median_trade_return",
+    "profit_factor",
+    "avg_cash_usage",
+    "max_concurrent_positions",
+    "exposure_days",
+    "longest_loss_streak",
+    "worst_trade",
+    "best_trade",
+    "daily_equity_curve_tail"
+  ],
+  "questions_for_cc": [
+    "真实持仓约束后，dec_C 和 dec_E 哪个更适合用户实盘？",
+    "max_positions 设为 2、3、5 时，策略收益和回撤是否稳定？",
+    "单票仓位 10%、15%、20% 哪个更合理？",
+    "如果只能先实盘观察一个规则，你建议 dec_C 还是 dec_E？为什么？",
+    "下一轮更应该加入市场环境过滤，还是先扩展更长分钟线数据？"
+  ],
+  "constraints": [
+    "不要使用未来函数：T日只用T日收盘前可见信号，T+1/T+2只用于退出。",
+    "不要把固定14:00卖出当作主策略，它只是对照组。",
+    "不要在45天分钟线样本上过度调参。",
+    "如果分钟线缺失，记录缺失数量，不要把数据缺失当策略失败。",
+    "不要记录或输出任何账号密码。",
+    "如果修改代码，保持小范围改动，并在摘要里列出改动文件。"
+  ],
+  "done_when": [
+    "done目录出现 tail_position_sizing_001_result.json",
+    "reports目录出现完整JSON和Markdown摘要",
+    "摘要明确回答：真实资金占用后，dec_E是否仍值得继续研究；dec_C是否更适合稳健实盘"
+  ]
+}

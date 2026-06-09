@@ -1,0 +1,188 @@
+{
+  "id": "tail_market_timing_filter_001",
+  "created_at": "2026-06-09T15:55:00+08:00",
+  "created_by": "codex",
+  "project_root": "C:\\Users\\56440\\v8_desktop",
+  "priority": "high",
+  "purpose": "在已修复的 90/120 交易日数据覆盖上，用新的尾盘趋势 baseline d3+ma20_gap 验证市场环境/择时过滤是否能真正降低结构性回撤。前几轮已经证明：机械止损最多改善约 1.27pp DD，因子组合最多改善约 0.81pp DD；因此本轮只测试何时允许开仓，不继续做相邻因子搜索或止损阈值优化。",
+  "background": {
+    "latest_market_context": {
+      "date": "2026-06-09",
+      "summary": "A股收盘大反弹，科技高弹性方向显著修复：沪指重回4000点，创业板指和科创方向强，半导体/存储/PCB/元件领涨，油气/煤炭/白酒/地产/零售偏弱。",
+      "interpretation": "这支持测试市场风险偏好与科技主线强度过滤，但不能把单日行情硬编码为规则。"
+    },
+    "previous_result_files": [
+      "C:\\Users\\56440\\v8_desktop\\backtest_queue\\done\\tail_execution_data_coverage_001_result.json",
+      "C:\\Users\\56440\\v8_desktop\\backtest_queue\\done\\tail_stop_risk_control_001_result.json",
+      "C:\\Users\\56440\\v8_desktop\\backtest_queue\\done\\tail_factor_combo_long_window_001_result.json",
+      "C:\\Users\\56440\\v8_desktop\\reports\\tail_execution_data_coverage_summary_20260609.md",
+      "C:\\Users\\56440\\v8_desktop\\reports\\tail_stop_risk_control_summary_20260609.md",
+      "C:\\Users\\56440\\v8_desktop\\reports\\tail_factor_combo_long_window_summary_20260609.md",
+      "C:\\Users\\56440\\v8_desktop\\STRATEGY_WORKLOG.md"
+    ],
+    "data_coverage": {
+      "valid_trading_days": 120,
+      "date_range": "2025-11-21 ~ 2026-05-25",
+      "kline_count": 600,
+      "raw_factor_rows": 7190,
+      "execution_attach_dropped_rows": 0
+    },
+    "current_factor_baseline": {
+      "name": "trend_quality_ma20",
+      "formula": "z(d3) + z(ma20_gap)",
+      "execution": "dec_E + max_positions=2",
+      "pp20_120d": {
+        "total_return": 25.77,
+        "max_drawdown": -27.65,
+        "return_to_drawdown": 0.93,
+        "profit_factor": 1.808,
+        "win_rate": 48.9,
+        "trade_count": 139
+      },
+      "why_promoted": "Only factor combo that fully beat elastic_base on return, r/dd, PF, win rate, and half-window stability."
+    },
+    "superseded_baseline": {
+      "name": "elastic_base",
+      "formula": "z(atr_pct) + z(ret_20d) + z(ma20_gap)",
+      "pp20_120d": {
+        "total_return": 23.01,
+        "max_drawdown": -28.46,
+        "return_to_drawdown": 0.81,
+        "profit_factor": 1.639,
+        "win_rate": 46.4,
+        "trade_count": 140
+      },
+      "reason_not_preferred": "atr_pct was confirmed as a volatility amplifier, not long-window alpha."
+    },
+    "latest_decisions": [
+      "d3+ma20_gap is the new baseline if this tail-entry trend line remains in the system.",
+      "Do not restore V9 total score as the sole buy signal.",
+      "Do not keep searching nearby factor combinations for drawdown rescue.",
+      "Do not keep tuning mechanical stop-loss thresholds.",
+      "Current open question: can market regime / timing decide when this high-beta tail-entry module is allowed to trade?"
+    ]
+  },
+  "requested_work": [
+    {
+      "step": 1,
+      "description": "Read STRATEGY_WORKLOG.md, run_tail_market_filter_backtest.py, run_tail_factor_combo_long_window.py, run_tail_portfolio_backtest.py, run_factor_research.py, and the three latest result JSONs listed above. Do not rerun data coverage repair."
+    },
+    {
+      "step": 2,
+      "description": "Create a new standalone script, recommended name run_tail_market_timing_filter.py. Reuse existing factor table, execution price attach, and portfolio simulator patterns. Use kline_count=600 and windows of 90 and 120 trading days."
+    },
+    {
+      "step": 3,
+      "description": "Fixed stock selection baseline: factor score = z(d3) + z(ma20_gap), with the same basic eligibility filters as the prior long-window tests unless explicitly reported otherwise. Fixed execution: dec_E, max_positions=2. Test position_pct 0.15 and 0.20."
+    },
+    {
+      "step": 4,
+      "description": "Build point-in-time market environment features using only data visible on or before the entry date. At minimum include CSI300 close vs MA20/MA60, CSI300 ret5/ret20, MA20 slope, MA60 slope, CSI300 drawdown from 20d high, CSI300 intraday/day return if available, market breadth ratio from stock kline_dict, breadth change vs prior day, number/share of stocks above MA20 if feasible, and tech/growth proxy strength if available from existing data. If tech proxy is unavailable, mark it unavailable; do not invent it."
+    },
+    {
+      "step": 5,
+      "description": "Test single market gates first. Required examples: csi_above_ma20, csi_above_ma60, csi_ret20_positive, csi_ret5_positive, ma20_slope_positive, ma60_slope_positive, breadth >= 45/50/55/60%, breadth improving, csi_drawdown_20d <= 3/5/8%, and avoid days after broad market selloff if measurable."
+    },
+    {
+      "step": 6,
+      "description": "Test combined gates second. Required named gates: risk_on_loose = csi_above_ma20 OR breadth>=50%; risk_on_core = csi_above_ma20 AND csi_ret20_positive AND breadth>=50%; trend_confirmed = csi_above_ma20 AND ma20_slope_positive; breadth_confirmed = breadth>=55% AND breadth_improving; anti_crash = csi_drawdown_20d<=5% AND breadth>=45%; strong_risk_on = csi_above_ma20 AND csi_above_ma60 AND csi_ret20_positive AND breadth>=55%."
+    },
+    {
+      "step": 7,
+      "description": "Also test a regime-scaled position model, not only hard gates: full size when risk_on_core passes, half size when risk_on_loose passes, zero otherwise. Compare pp20 scaled model against fixed pp15 and fixed pp20."
+    },
+    {
+      "step": 8,
+      "description": "For each gate/report row, output pass rate, skipped trade count, trade_count_ratio_vs_baseline, total_return, max_drawdown, return_to_drawdown, PF, win rate, avg/median trade return, worst_trade, best_trade, longest_loss_streak, avg_cash_usage, and max_concurrent_positions."
+    },
+    {
+      "step": 9,
+      "description": "Do stability splits: 90d full, 120d full, 120d first_half, 120d second_half. A filter that only works in one half must not be promoted."
+    },
+    {
+      "step": 10,
+      "description": "Trace baseline worst trades: compare worst 10 trades under d3+ma20_gap baseline vs best market gate. Explain whether the gate actually avoided large drawdown clusters or merely skipped both winners and losers."
+    },
+    {
+      "step": 11,
+      "description": "Promote only if the filter materially improves live usability: target 120d pp20 max_drawdown improves by at least 5pp vs -27.65%, total_return remains positive and preferably >= 10%, PF remains > 1.4, trade_count stays >= 60% of baseline, and both halves remain directionally acceptable. If no gate passes, say clearly that this tail-entry line remains observation-only."
+    }
+  ],
+  "recommended_matrix": {
+    "windows_trading_days": [90, 120],
+    "stock_pool": "CSI300 top 60, consistent with prior repaired long-window tests",
+    "kline_count": 600,
+    "factor_baseline": "d3+ma20_gap",
+    "exit_rules": ["dec_E"],
+    "max_positions": [2],
+    "position_pct": [0.15, 0.20],
+    "market_gate_groups": [
+      "single_csi_trend",
+      "single_breadth",
+      "single_drawdown",
+      "combined_risk_on",
+      "regime_scaled_position"
+    ],
+    "stability_splits": ["90d_full", "120d_full", "120d_first_half", "120d_second_half"]
+  },
+  "must_output": {
+    "raw_report_json": "C:\\Users\\56440\\v8_desktop\\reports\\tail_market_timing_filter_<timestamp>.json",
+    "summary_markdown": "C:\\Users\\56440\\v8_desktop\\reports\\tail_market_timing_filter_summary_<timestamp>.md",
+    "queue_result_json": "C:\\Users\\56440\\v8_desktop\\backtest_queue\\done\\tail_market_timing_filter_001_result.json"
+  },
+  "metrics_required": [
+    "gate_name",
+    "gate_group",
+    "gate_definition",
+    "window_days",
+    "actual_date_range",
+    "position_pct",
+    "split",
+    "pass_rate",
+    "skipped_trade_count",
+    "trade_count",
+    "trade_count_ratio_vs_baseline",
+    "total_return",
+    "max_drawdown",
+    "drawdown_improvement_vs_baseline_pp",
+    "return_to_drawdown",
+    "profit_factor",
+    "win_rate",
+    "avg_trade_return",
+    "median_trade_return",
+    "longest_loss_streak",
+    "worst_trade",
+    "best_trade",
+    "worst_10_trades",
+    "top_10_trades",
+    "avg_cash_usage",
+    "max_concurrent_positions",
+    "first_half_metrics",
+    "second_half_metrics",
+    "reason_to_promote_or_reject"
+  ],
+  "questions_for_cc": [
+    "Can market regime/timing reduce 120d pp20 drawdown from -27.65% by at least 5pp while keeping positive return and PF>1.4?",
+    "Which environment feature has the most explanatory power: CSI300 trend, CSI300 momentum, breadth, drawdown avoidance, or combined risk-on?",
+    "Does a hard gate outperform a scaled exposure model?",
+    "Does pp15 plus market timing become materially more live-friendly than pp20?",
+    "Do promoted filters work in both halves, or are they just fitted to one regime?",
+    "Which baseline worst trades/clusters are avoided by the best gate?",
+    "Should this tail-entry module be allowed into daily scan as an active signal, or remain observation-only?"
+  ],
+  "constraints": [
+    "No future leakage. Entry-date filters may only use information visible on or before the entry date.",
+    "Do not use 2026-06-09 live market data inside the historical backtest unless it naturally belongs to the tested historical window. Today's market context is motivation only.",
+    "Do not restore V9 total score as the sole buy signal.",
+    "Do not continue optimizing atr_pct or elastic_base variants.",
+    "Do not continue optimizing stop-loss thresholds in this task.",
+    "If a market feature is unavailable from existing data, mark unavailable and explain; do not fabricate proxies without labeling them.",
+    "Do not promote high-return filters with low trade count, one-half-only performance, or performance driven by a few extreme winners.",
+    "Write outputs to reports and backtest_queue/done exactly as specified."
+  ],
+  "done_when": [
+    "backtest_queue\\done\\tail_market_timing_filter_001_result.json exists",
+    "reports contains full JSON and Markdown summary",
+    "summary clearly states whether any market timing filter is promoted, whether d3+ma20_gap can become an active daily-scan signal, and what the next task should be"
+  ]
+}

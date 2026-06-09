@@ -2,5 +2,9 @@
 /*
 # 保留 memory 文件夹
 !/memory/
+!/v8_desktop/
 # 保留 .gitignore 自己
 !.gitignore
+# 保留 sync 脚本
+!/sync.ps1
+!/setup-sync.ps1

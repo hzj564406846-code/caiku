@@ -1,0 +1,46 @@
+{
+  "holdings": [
+    {
+      "code": "603501",
+      "name": "豪威集团",
+      "shares": 400,
+      "cost": 101.315,
+      "current_price": 95.0,
+      "market_value": 38000.0,
+      "pnl": -2526.0,
+      "pnl_pct": -6.2,
+      "stop_loss": 95.0,
+      "target1": 115.0,
+      "target2": 125.0,
+      "entry_date": "2026-05-21",
+      "note": "5/29 97加仓100股，均价降至101.315"
+    },
+    {
+      "code": "600183",
+      "name": "生益科技",
+      "shares": 100,
+      "cost": 104.772,
+      "current_price": 140.62,
+      "market_value": 14062.0,
+      "pnl": 3585.0,
+      "pnl_pct": 34.2,
+      "stop_loss": 130.0,
+      "target1": 115.0,
+      "target2": 130.0,
+      "entry_date": "2026-05-22"
+    }
+  ],
+  "summary": {
+    "total_invested": 51003.2,
+    "total_market_value": 52062.0,
+    "cash": 5300,
+    "total_assets": 57362.0,
+    "total_pnl": 1058.800000000003,
+    "total_pnl_pct": 2.1,
+    "position_pct": 90.8
+  },
+  "_meta": {
+    "updated": "2026-05-29",
+    "note": "豪威97加仓100股，均价降至101.32。半导体板块全线暴跌，豪威-6.77%至95。明天不翻红全出。"
+  }
+}

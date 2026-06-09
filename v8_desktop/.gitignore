@@ -1,0 +1,12 @@
+cache/
+reports/
+__pycache__/
+*.pyc
+*.pyo
+backtest_queue/done/
+scan_result.txt
+scan_stderr.txt
+scan_stdout.txt
+*.log
+.venv/
+venv/

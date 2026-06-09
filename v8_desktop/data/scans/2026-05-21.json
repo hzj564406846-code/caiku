@@ -1,0 +1,27 @@
+{
+  "date": "2026-05-21",
+  "regime": {
+    "regime": "bull"
+  },
+  "market_breadth": {
+    "up": 120,
+    "down": 180
+  },
+  "hot_sectors": [],
+  "pump_predictions": [],
+  "top50": [
+    {
+      "code": "002600",
+      "name": "领益智造",
+      "score": 83,
+      "d1": 33,
+      "d4": 15,
+      "atr": 4.2,
+      "chg": 3.3,
+      "to": 8.1,
+      "ind": "C39"
+    }
+  ],
+  "scan_count": 300,
+  "scan_time": 45.2
+}

@@ -1,0 +1,149 @@
+{
+  "id": "tail_factor_risk_search_001",
+  "created_at": "2026-06-08T23:30:00+08:00",
+  "created_by": "codex",
+  "project_root": "C:\\Users\\56440\\v8_desktop",
+  "priority": "high",
+  "purpose": "回到因子组合搜索和个股风险过滤，目标是在当前尾盘短线执行框架 dec_E + max_positions=2 下，降低个股级别回撤，而不是继续做市场环境过滤。",
+  "background": {
+    "previous_tasks": [
+      "tail_1400_decision_001",
+      "tail_position_sizing_001",
+      "tail_market_filter_001"
+    ],
+    "key_findings": [
+      "尾盘买入后，T+1 14:00 应作为去留决策点，不是机械卖点。",
+      "真实持仓约束后，dec_E + max_positions=2 + position_pct=20% 是当前最佳配置：total_return +12.74%, max_drawdown -11.64%, win_rate 60%, PF 3.27。",
+      "市场环境过滤没有改善收益/回撤比。回撤主要来自个股选择风险/单票暴跌，而不是系统性市场风险。",
+      "下一轮应优化因子组合和个股风险过滤，降低 worst_trade 和 max_drawdown。"
+    ],
+    "baseline": {
+      "factor": "elastic_base = ATR% + ret_20d + ma20_gap",
+      "exit_rule": "dec_E",
+      "max_positions": 2,
+      "position_pct": [0.15, 0.20],
+      "baseline_pp20": {
+        "total_return": 12.74,
+        "max_drawdown": -11.64,
+        "return_to_drawdown": 1.09,
+        "win_rate": 60.0,
+        "profit_factor": 3.27,
+        "trade_count": 35
+      }
+    }
+  },
+  "requested_work": [
+    {
+      "step": 1,
+      "description": "先读取上一轮结果：tail_position_sizing_001_result.json、tail_market_filter_001_result.json、tail_portfolio_backtest_summary_20260608.md、tail_market_filter_backtest_summary_20260608.md。"
+    },
+    {
+      "step": 2,
+      "description": "不要继续做市场环境过滤。本轮只测试个股级别因子组合和风险过滤是否能降低最大回撤/worst_trade。"
+    },
+    {
+      "step": 3,
+      "description": "建议新增独立脚本 run_tail_factor_risk_search.py，复用 run_tail_portfolio_backtest.py 的选股、执行和持仓模拟逻辑。"
+    },
+    {
+      "step": 4,
+      "description": "基础执行框架固定：dec_E，max_positions=2，position_pct=0.15 和 0.20 都测；重点看 pp20，但如果 pp15 风险收益更好也要指出。"
+    },
+    {
+      "step": 5,
+      "description": "测试因子组合：base=atr_pct+ret_20d+ma20_gap；base+d3；base+d7；base+quality_factor；base低波动惩罚（例如 -z(atr_pct) 或 ATR cap）；base+volume_ratio；base+upper_shadow惩罚；base+limit/极端涨跌过滤。注意不要把所有东西一次全塞，先做可解释组合。"
+    },
+    {
+      "step": 6,
+      "description": "测试个股风险过滤：ATR上限 5/6/7；排除 T日长上影（upper_shadow_pct > 3% 或 > 5%）；排除单日涨幅过大（change_pct > 5% / >7%）；排除 intraday_range_pct > 8% / >10%；排除 vol_spike_ratio 过大；排除 limit_move_flag。"
+    },
+    {
+      "step": 7,
+      "description": "如果有 fundamental_gate 或 Tushare 财务数据可用且不耗费太多时间，可只做已有缓存样本；没有则标记 unavailable，不要现场大规模拉取 Tushare。"
+    },
+    {
+      "step": 8,
+      "description": "输出 top 10 组合/过滤规则，按 return_to_drawdown、max_drawdown、PF、win_rate 综合排序。不要只报最高收益。"
+    },
+    {
+      "step": 9,
+      "description": "重点追踪最差交易：列出 baseline 的 worst 5 trades，以及新规则是否过滤掉这些交易；如果过滤掉亏损的同时也过滤掉主要盈利，要明确说明。"
+    }
+  ],
+  "recommended_matrix": {
+    "execution": {
+      "exit_rule": "dec_E",
+      "max_positions": [2],
+      "position_pct": [0.15, 0.20]
+    },
+    "factor_candidates": [
+      "elastic_base",
+      "elastic_base_plus_d3",
+      "elastic_base_plus_d7",
+      "elastic_base_minus_atr",
+      "elastic_base_atr_cap5",
+      "elastic_base_atr_cap6",
+      "elastic_base_no_upper_shadow3",
+      "elastic_base_no_upper_shadow5",
+      "elastic_base_no_change_gt5",
+      "elastic_base_no_change_gt7",
+      "elastic_base_no_range_gt8",
+      "elastic_base_no_range_gt10",
+      "elastic_base_no_vol_spike",
+      "elastic_base_no_limit"
+    ],
+    "target": {
+      "desired_total_return": ">=10%",
+      "desired_max_drawdown": "<=8%",
+      "desired_return_to_drawdown": ">=1.5",
+      "desired_profit_factor": ">2",
+      "desired_win_rate": ">=55%"
+    }
+  },
+  "must_output": {
+    "raw_report_json": "C:\\Users\\56440\\v8_desktop\\reports\\tail_factor_risk_search_<timestamp>.json",
+    "summary_markdown": "C:\\Users\\56440\\v8_desktop\\reports\\tail_factor_risk_search_summary_<timestamp>.md",
+    "queue_result_json": "C:\\Users\\56440\\v8_desktop\\backtest_queue\\done\\tail_factor_risk_search_001_result.json"
+  },
+  "metrics_required": [
+    "rule_name",
+    "position_pct",
+    "total_return",
+    "max_drawdown",
+    "return_to_drawdown",
+    "trade_count",
+    "filtered_signal_count",
+    "win_rate",
+    "avg_trade_return",
+    "median_trade_return",
+    "profit_factor",
+    "longest_loss_streak",
+    "worst_trade",
+    "best_trade",
+    "worst_5_trades",
+    "filtered_worst_trades_from_baseline",
+    "avg_cash_usage",
+    "max_concurrent_positions"
+  ],
+  "questions_for_cc": [
+    "哪个因子/风险过滤最有效地降低了个股级别回撤？",
+    "是否有组合达到 total_return >=10% 且 max_drawdown <=8%？",
+    "低波动惩罚会不会把策略的核心弹性 edge 也杀掉？",
+    "ATR 上限应该设 5、6、7，还是不应再收紧？",
+    "如果只能给实盘观察加一个个股风险过滤，你建议加哪个？",
+    "下一轮应该延长回测窗口，还是把优胜组合接入每日扫描输出？"
+  ],
+  "constraints": [
+    "不要使用未来函数。",
+    "不要继续优化市场环境过滤。",
+    "不要大规模新拉 Tushare；基本面只用已有缓存或标记 unavailable。",
+    "不要把样本少的极端高收益组合当结论，trade_count 过低必须降级。",
+    "不要只报最高收益，必须按收益/回撤和 worst_trade 改善来排序。",
+    "如果修改代码，保持独立脚本优先，并在摘要列出文件。"
+  ],
+  "done_when": [
+    "done目录出现 tail_factor_risk_search_001_result.json",
+    "reports目录出现完整JSON和Markdown摘要",
+    "摘要明确回答：是否找到比 elastic_base 更适合 dec_E 执行框架的低回撤因子/过滤组合"
+  ]
+}

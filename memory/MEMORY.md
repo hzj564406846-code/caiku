@@ -8,6 +8,7 @@
 - [Aggressive Strategy](aggressive_short_term_strategy.md) — 激进短线策略启动包
 - [详细分析报告](detailed_analysis_spec.md) — 个股深度分析技术规格书
 - [Strategy Finalization](strategy_finalization.md) — 策略定稿
+- [Strategy Reviewer](strategy_reviewer_role.md) — 笔记本窗口策略审查员角色
 - [User History](user_history.md) — 用户历史记录
 - [Conversation History](conversation_history.md) — 历史会话摘要
 - [Session 2026-05-09](session_2026-05-09.md)

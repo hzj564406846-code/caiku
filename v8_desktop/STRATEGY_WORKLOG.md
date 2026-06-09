@@ -1080,6 +1080,25 @@ Recommendations:
 ### Known issues
 - Baseline still shows 0 trades in this script (import issue with `attach_execution_prices`). Known-good baseline from fix_rerun: 120d pp20 ret +25.77%, DD -27.65%.
 
+### Baseline Interpretation Clarification
+
+The `expand_sample` script still has the same baseline wiring bug: `attach_execution_prices` / baseline field alignment causes baseline metrics and `dd_vs_baseline` to show `0`.
+
+This does **not** invalidate the promoted pullback configurations, because their absolute metrics are computed from their own executed trades and equity curves:
+
+| Metric | Known-good tail baseline from fix_rerun | Expand-sample promoted pullback |
+|--------|-----------------------------------------|---------------------------------|
+| 120d DD | `-27.65%` | `-7.45%` |
+| 120d return | `+25.77%` | `+8.37%` |
+| PF | `1.81` | `1.80` |
+| Trades | `139` | `72` |
+
+Decision:
+
+- Ignore `dd_vs_baseline` from `expand_sample`.
+- Use the known-good `fix_rerun` baseline for cross-checks.
+- The real drawdown improvement is about `20pp`, and the promoted pullback line remains valid for paper-trading observation.
+
 After every important decision, append a dated note with:
 
 - Context.

@@ -26,6 +26,10 @@
 - [Stock Trading](desktop/stock_trading.md) — v2.3策略+D4改造+top_n移除
 - [Current Positions](desktop/current_positions.md) — 实盘+模拟盘v2.3
 
+## 租划算 — 资产回收工作
+- [Job Overview](zuhuasuan/job_overview.md) — 法催打法、提成40%、话术策略、法律依据
+- [Case: 梁有世](zuhuasuan/case_liangyoushi.md) — 控告书详情、案件分析
+
 ## 交易记忆 — Laptop (另一台电脑)
 - [Stock Trading](laptop/stock_trading.md) — 另一台的策略状态
 - [Current Positions](laptop/current_positions.md) — 另一台的持仓

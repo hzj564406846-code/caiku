@@ -3,6 +3,7 @@
 - [User Profile](user_profile.md) — 胡志君, 风控背景, 炒股, 所有回复用中文
 - [User Feedback](feedback.md) — 沟通规则+前置条件要求
 - [Chat Interaction Rules](chat_interaction_rules.md) — 聊天交互规则：递球接球、回复长度、深夜规则、幽默风格
+- [Chat Memory](chat_memory.md) — 聊天风格参考文件，所有CC窗口统一语气思路
 - [V9 Strategy](v9_strategy.md) — 7维评分框架, 权重表, 回测摘要, D1数据源
 - [Installed Skills](installed_skills.md) — UZI-Skill已加载可用
 - [Aggressive Strategy](aggressive_short_term_strategy.md) — 激进短线策略启动包

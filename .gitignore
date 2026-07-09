@@ -2,6 +2,7 @@
 /*
 # 保留 memory 文件夹
 !/memory/
+!/PCCodex记忆/
 !/v8_desktop/
 # 保留 .gitignore 自己
 !.gitignore

@@ -23,9 +23,6 @@
 - [QClaw Comm Protocol](qclaw_comm_protocol.md) — 微信↔QClaw↔Claude通信
 - [Robot Vacuum](robot_vacuum.md) — 小米扫地机器人
 
-## PCCodex 记忆 — Desktop Codex
-- [PCCodex Memory](../PCCodex记忆/MEMORY.md) — 本机 Codex 窗口专用记忆，接入 git 自动同步
-
 ## 交易记忆 — Desktop (这台电脑)
 - [Stock Trading](desktop/stock_trading.md) — v2.3策略+D4改造+top_n移除
 - [Current Positions](desktop/current_positions.md) — 实盘+模拟盘v2.3

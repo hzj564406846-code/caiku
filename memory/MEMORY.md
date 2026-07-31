@@ -29,7 +29,10 @@
 
 ## 租划算 — 资产回收工作
 - [Job Overview](zuhuasuan/job_overview.md) — 法催打法、提成40%、话术策略、法律依据
+- [Session 2026-06-26](zuhuasuan/session_2026-06-26.md) — 批量生成情况说明、OCR流程跑通
 - [Case: 梁有世](zuhuasuan/case_liangyoushi.md) — 控告书详情、案件分析
+- [租划算总览](zuhuasuan_job.md) — 完整工作记录, 6月入职至今, 骑驴找马
+- [换工作进展](job_hunting.md) — 华铁大黄蜂面试, 求职方向
 
 ## 交易记忆 — Laptop (另一台电脑)
 - [Stock Trading](laptop/stock_trading.md) — 另一台的策略状态

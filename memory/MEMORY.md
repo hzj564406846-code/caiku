@@ -26,6 +26,7 @@
 ## 交易记忆 — Desktop (这台电脑)
 - [Stock Trading](desktop/stock_trading.md) — v2.3策略+D4改造+top_n移除
 - [Current Positions](desktop/current_positions.md) — 实盘+模拟盘v2.3
+- [桌面宠物的记忆](desktop/desktop_pet.md) — 源源上班搭子的需求、版本进度与下次续作入口
 
 ## 租划算 — 资产回收工作
 - [Job Overview](zuhuasuan/job_overview.md) — 法催打法、提成40%、话术策略、法律依据

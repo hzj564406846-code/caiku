@@ -28,12 +28,14 @@
 - [Current Positions](desktop/current_positions.md) — 实盘+模拟盘v2.3
 - [桌面宠物的记忆](desktop/desktop_pet.md) — 源源上班搭子的需求、版本进度与下次续作入口
 
-## 租划算 — 资产回收工作
-- [Job Overview](zuhuasuan/job_overview.md) — 法催打法、提成40%、话术策略、法律依据
+## 工作 — 职业轨迹
+- [租划算总览](zuhuasuan_job.md) — 手机租赁催收, 2026年6月-7月, 已离职
+- [换工作进展](job_hunting.md) — 租划算→华铁大黄蜂→兴邦金租, 已定
+- [兴邦金租](xingbang_job.md) — 二手车金融SP渠道开发, 2026年7月底入职
+- [租划算工作详情](zuhuasuan/job_overview.md) — 法催打法、提成40%、话术策略、法律依据
 - [Session 2026-06-26](zuhuasuan/session_2026-06-26.md) — 批量生成情况说明、OCR流程跑通
+- [Session 2026-07](zuhuasuan/session_2026-07.md) — 26案跑完、离职决定
 - [Case: 梁有世](zuhuasuan/case_liangyoushi.md) — 控告书详情、案件分析
-- [租划算总览](zuhuasuan_job.md) — 完整工作记录, 6月入职至今, 骑驴找马
-- [换工作进展](job_hunting.md) — 华铁大黄蜂面试, 求职方向
 
 ## 交易记忆 — Laptop (另一台电脑)
 - [Stock Trading](laptop/stock_trading.md) — 另一台的策略状态

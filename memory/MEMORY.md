@@ -33,6 +33,7 @@
 - [换工作进展](job_hunting.md) — 租划算→华铁大黄蜂→兴邦金租, 已定
 - [兴邦金租](xingbang_job.md) — 二手车金融SP渠道开发, 2026年7月底入职
 - [兴邦二手商用车金融实操（2026-08-17）](../PCCodex记忆/session_2026-08-17_兴邦二手商用车金融.md) — 政策、展业、测算和首个流水案例的脱敏结论
+- [Session 2026-08-26 兴邦考试](career/session_2026-08-26_兴邦考试.md) — 考试答题记录、简道云面调录入、Playwright自动化卡点
 - [租划算工作详情](career/job_overview.md) — 法催打法、提成40%、话术策略、法律依据
 - [Session 2026-06-26](career/session_2026-06-26.md) — 批量生成情况说明、OCR流程跑通
 - [Session 2026-07](career/session_2026-07.md) — 26案跑完、离职决定
